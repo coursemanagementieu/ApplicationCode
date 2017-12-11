@@ -1,10 +1,15 @@
+from sqlite3 import *
+import db_fonk
+
+connectDatabase = connect("cms.db")
+db_cursor = connectDatabase.cursor()
+
 class Section:
-    def __init__(self):
-        self.sectionCode=""
-        self.day=[]
-        self.hour=[]
-        self.classRoom=[]
-        self.Students=[]
+    def __init__(self,code,day,hour,room):
+        self.sectionCode=code
+        self.day=day
+        self.hour=hour
+        self.classRoom=room
 
     def setSectionCode(self,code):
         self.sectionCode=code
@@ -30,11 +35,9 @@ class Section:
     def getClassRoom(self):
         return self.classRoom
 
-    def setStudent(self):
-        pass
+    def insertInDatabase(self):
+        db_fonk.insert_section(self.classRoom,self.hour,self.day)
 
-    def getStudent(self):
-        pass
 
     def displaySection(self):
         print("Section Code:",self.getSectionCode())
@@ -47,9 +50,11 @@ class Section:
         print("Classroom:",self.getClassRoom())
 
 
-class Student(Section):
+
+
+
+class Student():
     def __init__(self):
-        super().__init__()
         self.studentName=""
         self.studentId=""
         self.note=[]
@@ -84,6 +89,10 @@ class Student(Section):
     def getLetterGrade(self):
         pass
 
+    def insertInDatabase(self):
+        db_fonk.insert_student(self.studentId,self.studentName)
+
+        
     def display(self):
         print("Name:",self.getStudentName())
         print("Id:",self.getStudentId())
