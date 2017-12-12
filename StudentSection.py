@@ -1,12 +1,13 @@
 from sqlite3 import *
 import db_fonk
+import csv
 
 connectDatabase = connect("cms.db")
 db_cursor = connectDatabase.cursor()
 
 class Section:
-    def __init__(self,code,day,hour,room):
-        self.sectionCode=code
+    def __init__(self,Name,day,hour,room):
+        self.sectionName=Name
         self.day=day
         self.hour=hour
         self.classRoom=room
@@ -35,8 +36,24 @@ class Section:
     def getClassRoom(self):
         return self.classRoom
 
-    def insertInDatabase(self):
-        db_fonk.insert_section(self.classRoom,self.hour,self.day)
+    def insertSectionInDatabase(self):
+        db_fonk.insert_section(self.sectionName,self.classRoom,self.hour,self.day)
+        db_fonk.save_changes()
+
+
+    def importStudent(self):
+        tempStudents=[]
+        file = open('students.csv', "r")
+        read = csv.reader(file)
+        for row in read:
+            for i in row:
+                a = i.split(";")
+                a.pop(0)
+                a = tuple(a)
+                tempStudents.append(a)
+        for x in tempStudents:
+            db_fonk.insert_student(x[0],x[1])
+
 
 
     def displaySection(self):
@@ -54,9 +71,9 @@ class Section:
 
 
 class Student():
-    def __init__(self):
-        self.studentName=""
-        self.studentId=""
+    def __init__(self,sName,sId):
+        self.studentName=sName
+        self.studentId=sId
         self.note=[]
         self.grade=[]
 
@@ -89,10 +106,10 @@ class Student():
     def getLetterGrade(self):
         pass
 
-    def insertInDatabase(self):
+    def insertStudentInDatabase(self):
         db_fonk.insert_student(self.studentId,self.studentName)
 
-        
+
     def display(self):
         print("Name:",self.getStudentName())
         print("Id:",self.getStudentId())
@@ -101,7 +118,6 @@ class Student():
         for i in self.getNote():
             print(counter,":",i)
             counter=counter+1
-
 
 
 
