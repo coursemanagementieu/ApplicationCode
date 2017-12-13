@@ -24,7 +24,8 @@ class grade:
 
 
 class Section:
-    def __init__(self,Name,day,hour,room):
+    def __init__(self,Name="Empty",day="Empty",hour="Empty",room="Empty"):
+        self.sectionID = None
         self.sectionName=Name
         self.day=day
         self.hour=hour
@@ -54,8 +55,9 @@ class Section:
     def getClassRoom(self):
         return self.classRoom
 
-    def insertSectionInDatabase(self):
-        db_fonk.insert_section(self.sectionName,self.classRoom,self.hour,self.day)
+    def insertSectionInDatabase(self,semID,courseID):
+        self.sectionID = db_fonk.insert_section(self.sectionName,self.classRoom,self.hour,self.day)
+        db_fonk.insert_section_in(semID,courseID,sectionID)
         db_fonk.save_changes()
 
 
