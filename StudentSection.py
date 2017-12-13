@@ -5,6 +5,24 @@ import csv
 connectDatabase = connect("cms.db")
 db_cursor = connectDatabase.cursor()
 
+class grade:
+
+    def __init__(self,name,percentage,courseName):
+        self.name=name
+        self.courseName=courseName
+        self.percentage=percentage
+
+    def setGradeName(self,name):
+        self.name=name
+
+    def setCourseName(self,name):
+        self.courseName=name
+
+    def setPercentage(self,percentage):
+        self.percentage=percentage
+
+
+
 class Section:
     def __init__(self,Name,day,hour,room):
         self.sectionName=Name
@@ -118,6 +136,10 @@ class Student():
         for i in self.getNote():
             print(counter,":",i)
             counter=counter+1
+            
+            
+            
+  
 
 
 
