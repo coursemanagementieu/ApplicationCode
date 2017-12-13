@@ -8,12 +8,12 @@ db_cursor = connectDatabase.cursor()
 
 class grade:
 
-    def __init__(self, name, percentage, courseName,semesterName):
-        self.name = name
+    def __init__(self, gradeName, percentage, courseName,semesterName):
+        self.name = gradeName
         self.courseName = courseName
         self.percentage = percentage
         self.semesterName=semesterName
-        
+
 
     def setGradeName(self, name):
         self.name = name
@@ -23,6 +23,26 @@ class grade:
 
     def setPercentage(self, percentage):
         self.percentage = percentage
+
+    def setSemesterName(self,semesterName):
+        self.semesterName=semesterName
+
+    def getGradeName(self):
+        return self.name
+
+    def getCourseName(self):
+        return self.courseName
+
+    def getPercentage(self):
+        return self.percentage
+
+    def getSemesterNAme(self):
+        return self.semesterName
+
+    def insertGradeInDB(self):
+        pass
+
+
 
 
 class Section:
@@ -93,7 +113,6 @@ class Student():
     def __init__(self, sName, sId):
         self.studentName = sName
         self.studentId = sId
-        self.note = []
         self.grade = []
 
     def setStudentName(self, name):
@@ -108,8 +127,10 @@ class Student():
     def getStudentId(self):
         return self.studentId
 
-    def setNote(self, note):
-        self.note.append(note)
+    def setNote(self,head,note,date,semesterid,courseid,noteid="empty"):
+        db_fonk.insert_note(head,note,date)
+        db_fonk.insert_notein(semesterid,courseid,self.studentId,noteid)
+        db_fonk.save_changes()
 
     def getNote(self):
         return self.note
@@ -128,8 +149,6 @@ class Student():
 
     def insertStudentInDatabase(self):
         db_fonk.insert_student(self.studentId, self.studentName)
-        db_fonk.save_changes()
-        
 
     def display(self):
         print("Name:", self.getStudentName())
@@ -139,4 +158,11 @@ class Student():
         for i in self.getNote():
             print(counter, ":", i)
             counter = counter + 1
+
+
+
+
+
+
+
 
