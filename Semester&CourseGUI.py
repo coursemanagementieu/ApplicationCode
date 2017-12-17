@@ -164,6 +164,7 @@ def CallCreateNewSemester():
    CreateSemTlevell()
    CreateSemTlevel.grab_set()
    SemesterEntrys()
+   SelectSem.config(state='normal')
 
    SemNameLabel = Label(CreateSemTlevel, text ="*Semester Name : ",font='Arial')
    SemNameLabel.pack(padx=350,pady=20)
@@ -182,10 +183,9 @@ def CallCreateNewSemester():
 
 
 def Semesters():
-     global SemesterList
+     global SelectSem
      #FirstFrame.pack_propagate(0)
      #FirstFrame.place( anchor="e", relx=.5, rely=.63)
-
      CreateSemTlevell()
      CreateSemTlevel.grab_set()
      SemTlevelPos(450,580)
@@ -201,10 +201,9 @@ def Semesters():
 
      SelectSem = Button(CreateSemTlevel,text='Select Semester',command= Courses)
      SelectSem.place(relx=.8, rely=.4, anchor="center", height=40, width=95)
+     SelectSem.config(state='disabled')
 
      CreateSemTlevel.resizable(0,0)
-
-
 
 def Courses():
 
@@ -212,14 +211,17 @@ def Courses():
      CreateCoTlevel.grab_set()
      CourseTlevelPos(450,580)
      CourseListBox()
-
+     index = SemesterList.curselection()[0]
 
      #SecondFrame.pack_propagate(0)
      #SecondFrame.place( anchor="w", relx=.5, rely=.63)
 
-     CreatedCourses = Text(CreateCoTlevel,borderwidth=0,font='Arial')
-     CreatedCourses.insert(INSERT,"Created Courses")
-     CreatedCourses.place(relx=.1,rely=.18,height=30, width=150)
+     CreatedCourses1 = Text(CreateCoTlevel,borderwidth=0,font='Arial',fg="black")
+     CreatedCourses1.insert(INSERT,"Please \nAdd or Select a Course for : \n ")
+     CreatedCourses1.place(relx=.1,rely=.05,height=60, width=400)
+     CreatedCourses = Text(CreateCoTlevel,borderwidth=0,font='Arial 16',fg="blue")
+     CreatedCourses.insert(INSERT,""+SemesterList.get(index))
+     CreatedCourses.place(relx=.1,rely=.135,height=50, width=100)
 
 
      Add = Button(CreateCoTlevel,text='Add Course',command=CallCreateNewCourse)
