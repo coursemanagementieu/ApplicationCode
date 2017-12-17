@@ -91,9 +91,9 @@ def AddingSemFunc():
     SemesterListInsert()
     SemesterList.place(relx=.1,rely=.25,height=250, width=200)
     CreateSemTlevel.destroy()
-def SemesterListBox():
+def SemesterListBox(x):
     global SemesterList
-    SemesterList = Listbox(CreateSemTlevel)
+    SemesterList = Listbox(x)
 def SemesterListInsert():
     SemesterList.insert(0, " "+ SemNameEntry.get())
 # }
@@ -129,27 +129,27 @@ def CallCreateNewCourse():
    CreateCoTlevel.grab_set()
    CourseEntrys()
 
-   CoNameLabel = Label(CreateCoTlevel, text ="Course Name :")
+   CoNameLabel = Label(CreateCoTlevel, text ="*Course Name :")
    CoNameLabel.pack(padx=350,pady=20)
 
    CoNameEntry.pack(padx=350,pady=20)
 
-   CoCodeLabel = Label(CreateCoTlevel, text ="Course Code :")
+   CoCodeLabel = Label(CreateCoTlevel, text ="*Course Code :")
    CoCodeLabel .pack(padx=350,pady=20)
 
    CoCodeEntry.pack(padx=350,pady=20)
 
-   CoBookLabel = Label(CreateCoTlevel, text ="Course Book :")
+   CoBookLabel = Label(CreateCoTlevel, text ="*Course Book :")
    CoBookLabel.pack(padx=350,pady=20)
 
    CoBookEntry.pack(padx=350,pady=20)
 
-   CoRefBookLabel = Label(CreateCoTlevel, text ="Course Reference Book :")
+   CoRefBookLabel = Label(CreateCoTlevel, text ="*Course Reference Book :")
    CoRefBookLabel.pack(padx=350,pady=20)
 
    CoRefBookEntry.pack(padx=350,pady=20)
 
-   SyllabusLabel = Label(CreateCoTlevel, text ="Syllabus :")
+   SyllabusLabel = Label(CreateCoTlevel, text ="*Syllabus :")
    SyllabusLabel.pack(padx=350,pady=20)
 
    SyllabusEntry.pack(padx=350,pady=20)
@@ -178,17 +178,18 @@ def CallCreateNewSemester():
 
    AddNewSmesterBttn()
    AddNewSemesterButton.pack(side=BOTTOM,padx=350,pady=40)
+   CreateSemTlevel.resizable(0,0)
 
 
 def Semesters():
-
+     global SemesterList
      #FirstFrame.pack_propagate(0)
      #FirstFrame.place( anchor="e", relx=.5, rely=.63)
 
      CreateSemTlevell()
      CreateSemTlevel.grab_set()
      SemTlevelPos(450,580)
-     SemesterListBox()
+     SemesterListBox(CreateSemTlevel)
 
      CreatedSemesters = Text(CreateSemTlevel,borderwidth=0,font='Arial')
      CreatedSemesters.insert(INSERT,"Created Semesters")
@@ -201,7 +202,7 @@ def Semesters():
      SelectSem = Button(CreateSemTlevel,text='Select Semester',command= Courses)
      SelectSem.place(relx=.8, rely=.4, anchor="center", height=40, width=95)
 
-
+     CreateSemTlevel.resizable(0,0)
 
 
 
@@ -211,6 +212,7 @@ def Courses():
      CreateCoTlevel.grab_set()
      CourseTlevelPos(450,580)
      CourseListBox()
+
 
      #SecondFrame.pack_propagate(0)
      #SecondFrame.place( anchor="w", relx=.5, rely=.63)
@@ -226,7 +228,7 @@ def Courses():
      Add = Button(CreateCoTlevel,text='Select Course')
      Add.place(relx=.8, rely=.4, anchor="center", height=40, width=95)
 
-
+     CreateCoTlevel.resizable(0,0)
 
 
 
