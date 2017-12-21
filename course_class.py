@@ -48,7 +48,7 @@ class Course:
         return self.courseID
 
     # These functions is related with database
-    def insertCourseInDatabase(self,semesterName):
+    def insertCourseInDatabase(self, semesterName):
         self.courseID = db_fonk.insert_course(self.courseName, self.courseCode, self.courseBook,
                                               self.refBookName, self.syllabus)
         db_fonk.insert_coursein(semesterName, self.courseID)
@@ -73,8 +73,6 @@ class Course:
 
     # Display all of the courses in specific semester
     def get_all_course_in(self, semesterName):
-        # This return will be handled in the gui part and since knowing rowid it calls get_info_from_database_with_rowid
-        # to get the data
         return db_fonk.select_all_course_in_semester(semesterName)
 
     def delete_course(self, semesterName):
@@ -139,12 +137,11 @@ class Announcement:
 
 
 class Subject:
-    def __init__(self, semesterName, courseID, subject="Empty", reference="Empty", week="Empty"):
-        self.subject = subject
-        self.reference = reference
-        self.week = week
+    def __init__(self):
+        self.subject = None
+        self.reference = None
+        self.week = None
         self.ID = None
-        self.insertSubjectInDatabase(semesterName, courseID)
 
     def setSubject(self, subject):
         self.subject = subject
@@ -164,16 +161,16 @@ class Subject:
     def getWeek(self):
         return self.week
 
-    def getID(self):
-        return self.ID
+    def setID(self, rowid):
+        self.ID = rowid
 
     # These functions are related with database
     def insertSubjectInDatabase(self, semesterName, courseID):
         self.ID = db_fonk.insert_subject(self.subject, self.reference, self.week)
-        db_fonk.insert_sectionin(semesterName, courseID, self.ID)
+        db_fonk.insert_subjectin(semesterName, courseID, self.ID)
 
-    def get_rowid_from_database(self, semesterName, courseID, week):
-        self.ID = db_fonk.select_subject_rowid(semesterName, courseID, week)
+    def get_rowid_from_database(self, semesterName, courseID):
+        self.ID = db_fonk.select_subject_rowid(semesterName, courseID, self.week)
 
     def get_info_from_database(self):
         info = db_fonk.select_specific_subject(self.ID)

@@ -58,13 +58,12 @@ class Grade:
 
 
 class Section:
-    def __init__(self, semesterName, courseID,name="Empty", day="Empty", hour="Empty", room="Empty"):
+    def __init__(self):
         self.sectionID = None
-        self.sectionName = name
-        self.day = day
-        self.hour = hour
-        self.classRoom = room
-        self.insertSectionInDatabase(semesterName, courseID)
+        self.sectionName = None
+        self.day = None
+        self.hour = None
+        self.classRoom = None
 
     def setSectionName(self, name):
         self.sectionName = name
@@ -90,34 +89,33 @@ class Section:
     def getClassRoom(self):
         return self.classRoom
 
+    def setSectionID(self, rowid):
+        self.sectionID = rowid
+
 # These functions is related with database
     def insertSectionInDatabase(self, semID, courseID):
         self.sectionID = db_fonk.insert_section(self.sectionName, self.classRoom, self.hour, self.day)
         db_fonk.insert_sectionin(semID, courseID, self.sectionID)
 
-    def get_info_from_databe(self, semesterName, courseID, name):
-        self.sectionID = db_fonk.select_section_rowid(semesterName, courseID, name)
+    # Before using this function we need to know sectionName
+    def get_rowid_from_database(self, semesterName, courseID):
+        self.sectionID = db_fonk.select_section_rowid(semesterName, courseID, self.sectionName)
 
     # Return of the sectionin table gives us rowid and we can find information of it with using this function
-    def get_info_from_database_with_rowid(self, rowid):
-        self.sectionID = rowid
+    def get_info_from_database(self):
         info = db_fonk.select_specific_section(self.sectionID)
         self.setSectionName(info[0])
         self.setClassRoom(info[1])
         self.setHour(info[2])
         self.setDay(info[3])
 
-    def edit_section(self, semesterName, courseID, name):
-        self.get_info_from_databe(semesterName, courseID, name)
-        self.get_info_from_database_with_rowid(self.sectionID)
-        # Here system waits for user to make any change
+    def edit_section(self):
         db_fonk.edit_section(self.sectionID, self.sectionName, self.classRoom, self.hour, self.day)
 
-    def delete_section(self, semesterName, courseID, name):
-        self.get_info_from_databe(semesterName, courseID, name)
+    def delete_section(self):
         db_fonk.delete_section(self.sectionID)
 
-    def select_all_section_in(self, semesterName, courseID):
+    def get_all_section_in(self, semesterName, courseID):
         return db_fonk.select_all_section_in(semesterName, courseID)
 
     # This function is working ok, but how do you know that these student which are added is in this semester, course

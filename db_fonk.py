@@ -102,7 +102,7 @@ def edit_course(ID, name, code, book, refbook, syll):
 
 # Select all of the information of line which line ID is matched with given ID from course table
 def select_specific_course(ID):
-    db_cursor.execute("""SELECT name, code, book, referenceBook, syllabusLink FROM course WHERE ID=?""", str(ID))
+    db_cursor.execute("""SELECT name, code, book, referenceBook, syllabusLink FROM course WHERE ID=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -114,7 +114,7 @@ def select_all_course():
 
 
 def delete_course(ID):
-    db_cursor.execute("""DELETE FROM course WHERE rowid=?""", str(ID))
+    db_cursor.execute("""DELETE FROM course WHERE rowid=?""", (ID,))
     save_changes()
 
 
@@ -124,6 +124,7 @@ def insert_section(name="Empty", classroom="Empty", hour="Empty", day="Empty"):
     if row is None:
         db_cursor.execute("""INSERT INTO section VALUES(?,?,?,?,?)""", (None, name, classroom, hour, day))
         row = find_section_rowid(name, classroom, hour, day)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -160,10 +161,11 @@ def edit_section(ID, name, classroom, hour, day):
 
     if day is not None:
         db_cursor.execute("""UPDATE section SET day=? WHERE rowid=?""", (day, ID))
+    save_changes()
 
 
 def select_specific_section(ID):
-    db_cursor.execute("""SELECT name, classroom, hour, day FROM section WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT name, classroom, hour, day FROM section WHERE rowid=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -174,7 +176,8 @@ def select_all_section():
 
 
 def delete_section(ID):
-    db_cursor.execute("""DELETE FROM section WHERE rowid=?""", str(ID))
+    db_cursor.execute("""DELETE FROM section WHERE rowid=?""", (ID,))
+    save_changes()
 
 
 # ---Manage announcement table---
@@ -183,6 +186,7 @@ def insert_announcement(date="Empty", head="Empty", announcement="Empty"):
     if row is None:
         db_cursor.execute("""INSERT INTO announcement VALUES(?,?,?,?)""", (None, date, head, announcement))
         row = find_announcement_rowid(date, head, announcement)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -215,10 +219,11 @@ def edit_announcement(ID, date, head, announcement):
 
     if announcement is not None:
         db_cursor.execute("""UPDATE announcement SET announcement=? WHERE rowid=?""", (announcement, ID))
+    save_changes()
 
 
 def select_specific_announcement(ID):
-    db_cursor.execute("""SELECT date, head, announcement FROM announcement WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT date, head, announcement FROM announcement WHERE rowid=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -229,7 +234,8 @@ def select_all_announcement():
 
 
 def delete_announcement(ID):
-    db_cursor.execute("""DELETE FROM announcement WHERE rowid=?""", str(ID))
+    db_cursor.execute("""DELETE FROM announcement WHERE rowid=?""", (ID,))
+    save_changes()
 
 
 # --Manage subject table---
@@ -238,6 +244,7 @@ def insert_subject(sub="Empty", ref="Empty", week="Empty"):
     if row is None:
         db_cursor.execute("""INSERT INTO subject VALUES(?,?,?,?)""", (None, sub, ref, week))
         row = find_subject_rowid(sub, ref, week)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -269,10 +276,11 @@ def edit_subject(ID, sub, ref, week):
 
     if week is not None:
         db_cursor.execute("""UPDATE subject SET week=? WHERE rowid=?""", (week, ID))
+    save_changes()
 
 
 def select_specific_subject(ID):
-    db_cursor.execute("""SELECT subject, reference, week FROM subject WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT subject, reference, week FROM subject WHERE rowid=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -283,7 +291,8 @@ def select_all_subject():
 
 
 def delete_subject(ID):
-    db_cursor.execute("""DELETE FROM subject WHERE rowid=?""", str(ID))
+    db_cursor.execute("""DELETE FROM subject WHERE rowid=?""", (ID,))
+    save_changes()
 
 
 # ---Manage evaluation table---
@@ -292,6 +301,7 @@ def insert_evaluation(name="Empty", percentage=0):
     if row is None:
         db_cursor.execute("""INSERT INTO evaluation VALUES(?,?,?)""", (None, name, percentage))
         row = find_evaluation_rowid(name, percentage)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -320,10 +330,11 @@ def edit_evaluation(ID, name, percentage):
 
     if percentage is not None:
         db_cursor.execute("""UPDATE evaluation SET percentage=? WHERE rowid=?""", (percentage, ID))
+    save_changes()
 
 
 def select_specific_evaluation(ID):
-    db_cursor.execute("""SELECT name, percentage FROM evaluation WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT name, percentage FROM evaluation WHERE rowid=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -334,12 +345,14 @@ def select_all_evaluation():
 
 
 def delete_evaluation(ID):
-    db_cursor.execute("""DELETE FROM evaluation WHERE rowid=?""", str(ID))
+    db_cursor.execute("""DELETE FROM evaluation WHERE rowid=?""", (ID,))
+    save_changes()
 
 # ---Manage student table---
 def insert_student(ID, name="Empty"):
     try:
         db_cursor.execute("""INSERT INTO student VALUES(?,?)""", (ID, name))
+        save_changes()
     except IntegrityError:
         print("You have already such a this column.\n")
         select_specific_student(ID)
@@ -359,10 +372,12 @@ def select_all_student():
 def edit_student(ID, name):
     if name is not None:
         db_cursor.execute("""UPDATE student SET name=? WHERE ID=?""", (name, ID))
+        save_changes()
 
 
 def delete_student(ID):
     db_cursor.execute("""DELETE FROM student WHERE ID=?""", (ID,))
+    save_changes()
 
 
 # ---Manage note table---
@@ -371,6 +386,7 @@ def insert_note(head="Empty", note="Empty", date="Empty"):
     if row is None:
         db_cursor.execute("""INSERT INTO note VALUES(?,?,?,?)""", (None, head, note, date))
         row = find_note_rowid(head, note, date)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -402,10 +418,11 @@ def edit_note(ID, head, note, date):
 
     if date is not None:
         db_cursor.execute("""UPDATE note SET date=? WHERE rowid=?""", (date, ID))
+    save_changes()
 
 
 def select_specific_note(ID):
-    db_cursor.execute("""SELECT head, note, date FROM note WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT head, note, date FROM note WHERE rowid=?""", (ID,))
     return db_cursor.fetchone()
 
 
@@ -417,16 +434,18 @@ def select_all_note():
 
 def delete_note(ID):
     db_cursor.execute("""DELETE FROM note WHERE rowid=?""", str(ID))
+    save_changes()
 
 
 # Starting manage relation tables
 
 # Define the course in given semester.
 def insert_coursein(semID, cID):  # This function will be called after courseID known.
-    db_cursor.execute("""SELECT * FROM courseIn WHERE semesterID=? AND courseID=?""", (semID, str(cID)))
+    db_cursor.execute("""SELECT * FROM courseIn WHERE semesterID=? AND courseID=?""", (semID, cID))
     row = db_cursor.fetchone()
     if row is None:
-        db_cursor.execute("""INSERT INTO courseIn VALUES(?,?)""", (semID, str(cID)))
+        db_cursor.execute("""INSERT INTO courseIn VALUES(?,?)""", (semID, cID))
+        save_changes()
 
 
 # Select all course which are in given semester
@@ -446,6 +465,7 @@ def insert_sectionin(semID, cID, secID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO sectionIn VALUES(?,?,?)""", (semID, cID, secID))
+        save_changes()
 
 
 def select_all_section_in(semID, cID):
@@ -465,6 +485,7 @@ def insert_announcementin(semID, cID, annID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO announcementIn VALUES(?,?,?)""", (semID, cID, annID))
+        save_changes()
 
 
 def select_all_announcement_in(semID, cID):
@@ -484,6 +505,7 @@ def insert_evaluationin(semID, cID, evaID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO evaluationIn VALUES(?,?,?)""", (semID, cID, evaID))
+        save_changes()
 
 
 def select_all_evaluation_in(semID, cID):
@@ -504,6 +526,7 @@ def insert_subjectin(semID, cID, subID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO subjectIn VALUES(?,?,?)""", (semID, cID, subID))
+        save_changes()
 
 
 def select_all_subject_in(semID, cID):
@@ -524,6 +547,7 @@ def insert_studentin(semID, cID, secID, stuID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO studentIn VALUES(?,?,?,?)""", (semID, cID, secID, stuID))
+        save_changes()
 
 
 def select_all_student_in(semID, cID, secID):
@@ -546,6 +570,7 @@ def insert_student_evaluationin(semID, cID, evaID, stuID, evaluation):
         if row is None:
             db_cursor.execute("""INSERT INTO studentEvaluationIn VALUES (?,?,?,?,?)""",
                             (semID, cID, evaID, stuID, evaluation))
+            save_changes()
         else:
             print("Evaluation have already be given")
 
@@ -554,6 +579,7 @@ def edit_studentEvaluation_in(semID, cID, evaID, stuID, evaluation):
     if (evaluation is not None) and (evaluation >= 0) and (evaluation <= 100):
         db_cursor.execute("""UPDATE studentEvaluationIn SET evaluation=? WHERE semesterID=? AND courseID=? AND
                          evaluationID=? AND studentID=?""", (evaluation, semID, cID, evaID, stuID))
+        save_changes()
 
 
 # This function is better for our program
@@ -582,6 +608,7 @@ def insert_notein(semID, cID, stuID, nID):
     row = db_cursor.fetchone()
     if row is None:
         db_cursor.execute("""INSERT INTO noteIn VALUES (?,?,?,?)""", (semID, cID, stuID, nID))
+        save_changes()
 
 
 def select_all_note_in(semID, cID, stuID):
