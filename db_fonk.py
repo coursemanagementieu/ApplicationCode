@@ -81,7 +81,7 @@ def select_course_rowid(semID, code):
 
 
 def edit_course(ID, name, code, book, refbook, syll):
-    db_cursor.execute("""SELECT name,code,book,referenceBook,syllabusLink FROM course WHERE rowid=?""", str(ID))
+    db_cursor.execute("""SELECT name,code,book,referenceBook,syllabusLink FROM course WHERE rowid=?""", (ID,))
     row = db_cursor.fetchone()
     if name is not row[0]:
         db_cursor.execute("""UPDATE course SET name=? WHERE rowid=?""", (name, ID))

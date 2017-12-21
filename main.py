@@ -131,7 +131,7 @@ def course_management():
         info = course.get_all_course_in(semester.getSemesterName())
         for cell in info:
             course.setCourseID(cell[0])
-            course.get_rowid_from_database(semester.getSemesterName())
+            course.get_info_from_database()
             print(course.getCourseCode())
         code = input("Birini sec: ")
         course.setCourseCode(code)
@@ -141,7 +141,7 @@ def course_management():
         info = course.get_all_course_in(semester.getSemesterName())
         for cell in info:
             course.setCourseID(cell[0])
-            course.get_rowid_from_database(semester.getSemesterName())
+            course.get_info_from_database()
             print(course.getCourseCode())
 
 # def section_management:
