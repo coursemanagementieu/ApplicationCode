@@ -17,7 +17,7 @@ def save_changes():
 def insert_semester(name, week="Empty"):
     try:
         db_cursor.execute("""INSERT INTO semester VALUES(?,?)""", (name, week))
-        # save_changes()
+        save_changes()
     except IntegrityError:
         print("You have already inserted with this semestername.\n")
         # select_specific_semester(name)
@@ -37,10 +37,12 @@ def select_all_semester():
 def edit_semester(name, week):
     if week is not None:
         db_cursor.execute("""UPDATE semester SET week=? WHERE name=?""", (week, name))
+        save_changes()
 
 
 def delete_semester(name):
     db_cursor.execute("""DELETE FROM semester WHERE name=?""", (name,))
+    save_changes()
 
 
 # ---Manage course table---
@@ -51,6 +53,7 @@ def insert_course(name="Empty", code="Empty", book="Empty", refbook="Empty", syl
     if row is None:
         db_cursor.execute("""INSERT INTO course VALUES (?,?,?,?,?,?)""", (None, name, code, book, refbook, syll))
         row = find_course_rowid(name, code, book, refbook, syll)
+        save_changes()
         return row[0]
     else:
         print("You have already such a this column.\n")
@@ -94,11 +97,12 @@ def edit_course(ID, name, code, book, refbook, syll):
 
     if syll is not row[4]:
         db_cursor.execute("""UPDATE course SET syllabusLink=? WHERE rowid=?""", (syll, ID))
+    save_changes()
 
 
 # Select all of the information of line which line ID is matched with given ID from course table
 def select_specific_course(ID):
-    db_cursor.execute("""SELECT name, code, book, referenceBook, syllabus FROM course WHERE ID=?""", str(ID))
+    db_cursor.execute("""SELECT name, code, book, referenceBook, syllabusLink FROM course WHERE ID=?""", str(ID))
     return db_cursor.fetchone()
 
 
@@ -111,6 +115,7 @@ def select_all_course():
 
 def delete_course(ID):
     db_cursor.execute("""DELETE FROM course WHERE rowid=?""", str(ID))
+    save_changes()
 
 
 # ---Manage section table---
