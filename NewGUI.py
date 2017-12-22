@@ -36,26 +36,24 @@ class FullScreenApp(object):
         self.master.geometry(self._geom)
         self._geom=geom
 #--------------------------------------------------------
-#--------------------MAIN_FRAME--------------------------
-MainFrame = Frame(root,width=x*5, height=y*3, bg='powder blue')
-MainFrame.propagate(0)
-MainFrame.pack(expand=TRUE)
-#--------------------------------------------------------
+
 
 #--------------------FIRST_FRAME--------------------------
 FirstFrame = Frame(root,width=x, height=y*3, bg='white')
 FirstFrame.propagate(0)
+FirstFrame.pack(expand=0,side=LEFT)
 
 #---------------------------------------------------------
 
 #---------------------SECOND_FRAME------------------------
 SecondFrame = Frame(root,width=x*2, height=y*3, bg='gray91')
 SecondFrame.propagate(0)
+SecondFrame.place(x=x,y=0)
 
-def FramePacks():
-    FirstFrame.pack(expand=0,side=LEFT)
-    SecondFrame.place(x=x,y=0)
-    MainFrame.destroy()
+
+
+
+
 
 #---------------------------------------------------------
 
@@ -100,7 +98,7 @@ def get_all_course():
         course.setCourseID(cell[0])
         course.get_info_from_database()
         Course = tree.insert(Sem, 'end', text='Course',tags=('course'))
-        
+
 def SemesterListInsert():
     global Sem
 
@@ -119,7 +117,7 @@ def CallCreateNewSemester():
 
    global SemNameEntry,WeekEntry
    CreateSemesterWindow()
-   FramePacks()
+
 
    SemNameLabel = ttk.Label(CreateSemWindow,text ="*Semester Name : ",font='Arial')
    SemNameLabel.pack(padx=250,pady=20)
@@ -135,8 +133,9 @@ def CallCreateNewSemester():
 
    AddNewSmesterBttn()
    AddNewSemesterButton.pack(side=BOTTOM,padx=250,pady=40)
-   get_all_semester_name()
+
    get_all_course()
+
 
 
 
@@ -285,7 +284,9 @@ helpmenu = Menu(menubar, tearoff=0)
 helpmenu.add_command(label="About")
 menubar.add_cascade(label="Help", menu=helpmenu)
 #---------------------------------------------------------
-
+def OnDoubleClick(event):
+        item = tree.selection()[0]
+        print("you clicked on", tree.item(item,"text"))
 
 
 
@@ -294,12 +295,11 @@ SemesterList = Listbox()
 tree = ttk.Treeview(FirstFrame)
 tree.place(x=0,y=0,width= 500,height=y*3)
 
-MainLabel= ttk.Label(MainFrame,text=" COURSE MANAGEMENT SYSTEM ")
-MainLabel.config(font=("Calibri Light", 75,'bold'),background = 'white',foreground= '')
-MainLabel.place(x=0,y=150,height=250,width=1500)
+
+tree.bind("<Double-1>", OnDoubleClick)
 
 
-
+get_all_semester_name()
 app= FullScreenApp(root)
 root.config(menu=menubar)
 root.resizable(0,0)
