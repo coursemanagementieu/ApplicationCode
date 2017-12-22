@@ -130,7 +130,7 @@ def SemesterInfo():
     SemesterNameLabel.config(font=("Calibri", 55),background = 'light sky blue')
     SemesterNameLabel.place(x=0,y=0,height=150,width = 1000)
     SemesterWeekLabel = ttk.Label(SecondFrame,text=" Week Number :  "+semester.getSemesterWeek())
-    SemesterWeekLabel.place(x=400,y=150,height = 100 ,width = 900)
+    SemesterWeekLabel.place(x=0,y=150,height = 100 ,width = 900)
     SemesterWeekLabel.config(font=("Arial"))
 
 
@@ -213,22 +213,22 @@ def CourseInfo():
     course.insertCourseInDatabase(semester.getSemesterName())
     CourseNameLabel = ttk.Label(SecondFrame,text=" "+course.getCourseName())
     CourseNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    CourseNameLabel.place(x=0,y=150,height=100,width = 400)
+    CourseNameLabel.place(x=0,y=250,height=100,width = 900)
 
     CourseCodeLabel = ttk.Label(SecondFrame,text="Course Code :  "+course.getCourseCode())
-    CourseCodeLabel.place(x=0,y=250,height = 50 ,width = 400)
+    CourseCodeLabel.place(x=0,y=350,height = 50 ,width = 900)
     CourseCodeLabel.config()
 
     CourseBookLabel = ttk.Label(SecondFrame,text="Course Book :  "+course.getCourseBook())
-    CourseBookLabel.place(x=0,y=300,height = 50 ,width = 400)
+    CourseBookLabel.place(x=0,y=400,height = 50 ,width = 900)
     CourseBookLabel.config()
 
     CourseRefBookLabel = ttk.Label(SecondFrame,text="Course Referance Book :  "+course.getRefBookName())
-    CourseRefBookLabel.place(x=0,y=350,height = 50 ,width = 400)
+    CourseRefBookLabel.place(x=0,y=450,height = 50 ,width = 900)
     CourseRefBookLabel.config()
 
     SyllabusLabel = ttk.Label(SecondFrame,text="Syllabus :  "+course.getSyllabus())
-    SyllabusLabel.place(x=0,y=400,height = 50 ,width = 400)
+    SyllabusLabel.place(x=0,y=500,height = 50 ,width = 900)
     SyllabusLabel.config()
 
 
