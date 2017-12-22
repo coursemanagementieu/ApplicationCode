@@ -15,6 +15,9 @@ s.theme_use('vista')
 x = root.winfo_screenwidth()/5
 y = root.winfo_screenheight()/3
 
+semester = Semester()
+course = Course()
+
 
 #-----------------FULLSCREEN-----------------------------
 class FullScreenApp(object):
