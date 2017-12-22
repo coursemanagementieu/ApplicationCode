@@ -118,7 +118,7 @@ class Section:
 
     # This function is working ok, but how do you know that these student which are added is in this semester, course
     # and section?
-    def importStudent(self,semID,courseID):
+    def importStudent(self, semID, courseID):
         tempStudents = []
         file = open('students.csv', "r")
         read = csv.reader(file)
@@ -189,6 +189,9 @@ class Student():
 
     def get_student_evaluation_info_from_database(self, semesterName, courseID, evaluationID):
         self.grade = db_fonk.select_studentEvaluation_in(semesterName, courseID, evaluationID, self.studentId)
+
+    def get_evaluationID_from_studentGrade_in(self, semesterName, courseID):
+        return db_fonk.select_evaluationID_studentEvaluation_in(semesterName, courseID, self.studentId)
 
 
 class Note:

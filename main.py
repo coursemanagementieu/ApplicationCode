@@ -1,3 +1,9 @@
+# Belki tum classlar icin bir default ekleyip hepsiin attriutlarını Empty yapabiirim.
+# Subject weekleri kullanıcının semesterdaki girdiği weeke göre program otomatik arttiracak
+# Ogrenci puanı alınırken try except yapılcak not eger uygun degılse isleme tabi tutulmayacak
+# Ve belki basta ogrencilerının tum notları 0 olarak sıstem gırebılır bunun ustune kullanıcıdan update
+# etmesı beklenır. Yada sadece ınsert functiona kullanılabilir test edilmeli hata olup olmadıgını.
+
 from db_tables import *
 from db_fonk import *
 from semester_class import*
@@ -39,10 +45,19 @@ def arrange(text):
 def semester_management():
     secim = int(input(page))
     if secim is 1:
+        # Fix the text if a user gives such that "    abc   semester" it will fixed to "abc semester"
         name = arrange((input("Semester Name: ").split()))
         semester.setSemesterName(name)
-        week = arrange(input("Week number: ").split())  # Here may be we can take integer from user
-        semester.setSemesterWeek(week)
+        try:
+            week = int(input("Week : "))
+            if (week >= 0) and (week < 26):
+                week = str(week)
+                semester.setSemesterWeek(week)
+            else:
+                print("Hatali giris")
+
+        except ValueError:
+            print("Hatali giris")
         semester.insertSemesterIntoDatabase()
     elif secim is 2:
         info = semester.get_all_semester()
@@ -282,8 +297,17 @@ def subject_management():
         subject.setSubject(sub)
         ref = input("Reference: ")
         subject.setReference(ref)
-        w = input("Week: ")
-        subject.setWeek(w)
+        try:
+            w = int(input("Week: "))
+            semester.get_info_from_database()
+            if (w <= int(semester.getSemesterWeek())) and (w > 0):
+                w = str(w)
+                subject.setWeek(w)
+            else:
+                print("Hatali giris!")
+        except ValueError:
+            print("Hatali giris!")
+
         subject.insertSubjectInDatabase(semester.getSemesterName(), course.get_courseID())
     elif secim is 2:
         info = subject.get_all_subject_in(semester.getSemesterName(), course.get_courseID())
@@ -329,6 +353,7 @@ def subject_management():
         for cell in info:
             subject.setID(cell[0])
             subject.get_info_from_database()
+            print("ID: ", subject.getID())
             print("Subject: ", subject.getSubject())
             print("Reference: ", subject.getReference())
             print("Week: ", subject.getWeek())
@@ -440,6 +465,9 @@ def student_management():
                     "2-) Edit\n"
                     "3-) View\n"))
         if sec is 1:
+            # Ogrenci puanı alınırken try except yapılcak not eger uygun degılse isleme tabi tutulmayacak
+            # Ve belki basta ogrencilerının tum notları 0 olarak sıstem gırebılır bunun ustune kullanıcıdan update
+            # etmesı beklenır. Yada sadece ınsert functiona kullanılabilir test edilmeli hata olup olmadıgını.
             stugra = int(input("Grade: "))
             student.setStudentGrade(stugra)
             student.insert_student_grade_in_database(semester.getSemesterName(),

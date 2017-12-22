@@ -164,6 +164,9 @@ class Subject:
     def setID(self, rowid):
         self.ID = rowid
 
+    def getID(self):
+        return self.ID
+
     # These functions are related with database
     def insertSubjectInDatabase(self, semesterName, courseID):
         self.ID = db_fonk.insert_subject(self.subject, self.reference, self.week)
