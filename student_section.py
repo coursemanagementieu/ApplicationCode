@@ -5,18 +5,19 @@ import csv
 
 class Grade:
 
-    def __init__(self,  semesterName, courseID, gradeName="Empty", percentage=0):
-        self.name = gradeName
-        self.percentage = percentage
+    def __init__(self):
+        self.name = None
+        self.percentage = None
         self.ID = None
-        self.insertGradeInDB(semesterName, courseID)
-
 
     def setGradeName(self, name):
         self.name = name
 
     def setPercentage(self, percentage):
         self.percentage = percentage
+
+    def setID(self, rowid):
+        self.ID = rowid
 
     def getGradeName(self):
         return self.name
@@ -32,28 +33,22 @@ class Grade:
         self.ID = db_fonk.insert_evaluation(self.name, self.percentage)
         db_fonk.insert_evaluationin(semesterName, courseID, self.ID)
 
-    def get_info_from_database(self, semesterName, courseID, evaluationName):
-        self.ID = db_fonk.select_evaluiaton_rowid(semesterName, courseID, evaluationName)
-        self.get_info_from_database_with_rowid(self.ID)
+    def get_rowid_from_database(self, semesterName, courseID):
+        self.ID = db_fonk.select_evaluiaton_rowid(semesterName, courseID, self.name)
 
-    def get_info_from_database_with_rowid(self, rowid):
-        self.ID = rowid
+    def get_info_from_database(self):
         info = db_fonk.select_specific_evaluation(self.ID)
         self.setGradeName(info[0])
         self.setPercentage(info[1])
 
-    def edit_evaluation(self, semesterName, courseID, evaluationName):
-        self.get_info_from_database(semesterName, courseID, evaluationName)
-        self.get_info_from_database_with_rowid(self.ID)
-        # Here system waits for user to make any change
+    def edit_evaluation(self):
         db_fonk.edit_evaluation(self.ID, self.name, self.percentage)
 
-    def delete_evaluation(self, semesterName, courseID, evaluationName):
-        self.ID = db_fonk.select_evaluiaton_rowid(semesterName, courseID, evaluationName)
+    def delete_evaluation(self):
         db_fonk.delete_evaluation(self.ID)
 
     # This function return rowid of evaluations which are in given semester and course
-    def select_all_evaluation_in(self, semesterName, courseID):
+    def gel_all_evaluation_in(self, semesterName, courseID):
         return db_fonk.select_all_evaluation_in(semesterName, courseID)
 
 
@@ -91,6 +86,9 @@ class Section:
 
     def setSectionID(self, rowid):
         self.sectionID = rowid
+
+    def getSectionID(self):
+        return self.sectionID
 
 # These functions is related with database
     def insertSectionInDatabase(self, semID, courseID):
@@ -136,23 +134,10 @@ class Section:
             db_fonk.save_changes()
 
 
-    def displaySection(self):
-        print("Section Code:", self.getSectionName())
-        print("Section Day/s:")
-        for i in self.getDay():
-            print(i)
-        print("Hours:")
-        for i in self.getHour():
-            print(i)
-        print("Classroom:", self.getClassRoom())
-
-
 class Student():
-    def __init__(self, semesterName, courseID, sectionID, sName, sId):
-        self.studentName = sName
-        self.studentId = sId
-        self.ID = None
-        self.insertStudentInDatabase(semesterName, courseID, sectionID)
+    def __init__(self):
+        self.studentName = None
+        self.studentId = None
         self.grade = None
 
     def setStudentName(self, name):
@@ -180,50 +165,38 @@ class Student():
     #     pass
 
     def insertStudentInDatabase(self, semesterName, courseID, sectionID):
-        self.ID = db_fonk.insert_student(self.studentId, self.studentName)
-        db_fonk.insert_studentin(semesterName, courseID, sectionID, self.ID)
+        db_fonk.insert_student(self.studentId, self.studentName)
+        db_fonk.insert_studentin(semesterName, courseID, sectionID, self.studentId)
 
-    def get_info_from_database(self, studentID):
-        info = db_fonk.select_specific_student(studentID)
+    def get_info_from_database(self):
+        info = db_fonk.select_specific_student(self.studentId)
         self.setStudentName(info[0])
 
-    def edit_student(self, studentID):
-        self.get_info_from_database(studentID)
-        # Here system waits for user to make any change
+    def edit_student(self):
         db_fonk.edit_student(self.studentId, self.studentName)
 
-    def delete_student(self, studentID):
-        db_fonk.delete_student(studentID)
+    def delete_student(self):
+        db_fonk.delete_student(self.studentId)
 
     def get_all_student_in(self, semesterName, courseID, sectionID):
         return db_fonk.select_all_student_in(semesterName, courseID, sectionID)
 
-    def insert_student_grade_in_database(self, semesterName, courseID, evaluationID, studentID, evaluation):
-        db_fonk.insert_student_evaluationin(semesterName, courseID, evaluationID, studentID, evaluation)
+    def insert_student_grade_in_database(self, semesterName, courseID, evaluationID):
+        db_fonk.insert_student_evaluationin(semesterName, courseID, evaluationID, self.studentId, self.grade)
 
-    def edit_student_evaluation(self, semesterName, courseID, evaluationID, studentID, evaluation):
-        db_fonk.edit_studentEvaluation_in(semesterName, courseID, evaluationID, studentID, evaluation)
+    def edit_student_evaluation(self, semesterName, courseID, evaluationID):
+        db_fonk.edit_studentEvaluation_in(semesterName, courseID, evaluationID, self.studentId, self.grade)
 
-    def get_student_evaluation_info_from_database(self, semesterName, courseID, evaluationID, studentID):
-        self.grade = db_fonk.select_studentEvaluation_in(semesterName, courseID, evaluationID, studentID)
-
-    def display(self):
-        print("Name:", self.getStudentName())
-        print("Id:", self.getStudentId())
-        print("Notes:")
-        counter = 1
-        for i in self.getNote():
-            print(counter, ":", i)
-            counter = counter + 1
+    def get_student_evaluation_info_from_database(self, semesterName, courseID, evaluationID):
+        self.grade = db_fonk.select_studentEvaluation_in(semesterName, courseID, evaluationID, self.studentId)
 
 
 class Note:
-    def __init__(self, semesterName, courseID, studentID, head="Empty", note="Empty", date="Empty"):
-        self.head = head
-        self.note = note
-        self.date = date
+    def __init__(self):
+        self.head = None
+        self.note = None
+        self.date = None
         self.ID = None
-        self.insertNoteInDatabase(semesterName, courseID, studentID)
 
     def setHead(self, head):
         self.head = head
@@ -243,28 +216,29 @@ class Note:
     def getDate(self):
         return self.date
 
+    def setID(self, rowid):
+        self.ID = rowid
+
+    def getID(self):
+        return self.ID
+
     def insertNoteInDatabase(self, semesterName, courseID, studentID):
         self.ID = db_fonk.insert_note(self.head, self.note, self.date)
         db_fonk.insert_notein(semesterName, courseID, studentID, self.ID)
 
-    def get_info_from_database(self, semesterName, courseID, studentID, head):
-        self.ID = db_fonk.select_note_rowid(semesterName, courseID, studentID, head)
+    def get_rowid_from_database(self, semesterName, courseID, studentID):
+        self.ID = db_fonk.select_note_rowid(semesterName, courseID, studentID, self.head)
 
-    def get_info_from_database_with_rowid(self, rowid):
-        self.ID = rowid
+    def get_info_from_database(self):
         info = db_fonk.select_specific_note(self.ID)
         self.setHead(info[0])
         self.setNote(info[1])
         self.setDate(info[2])
 
-    def edit_note(self, semesterName, courseID, studentID, head):
-        self.get_info_from_database(semesterName, courseID, studentID, head)
-        self.get_info_from_database_with_rowid(self.ID)
-        # Here system waits for user to make any change
+    def edit_note(self):
         db_fonk.edit_note(self.ID, self.head, self.note, self.date)
 
-    def delete_note(self, semesterName, courseID, studentID, head):
-        self.get_info_from_database(semesterName, courseID, studentID, head)
+    def delete_note(self):
         db_fonk.delete_note(self.ID)
 
     def get_all_note_in(self, semesterName, courseID, studentID):
