@@ -368,8 +368,149 @@ def SectionInfo():
     SectionDayLabel.config()
 
 
+#------------------------------------------------------------
 
 
+#-------------------ANNOUNCEMENT_FUNCTION-------------------------
+
+
+def AddNewAnnouncementBttn():
+    global AddNewAnnouncementButton
+    AddNewAnnouncementButton = ttk.Button(CreateAnnouncementwindow,text= 'Add Announcement',command=CheckAnnouncementEntrys)
+
+def CheckAnnouncementEntrys():
+    if len(AnnDateEntry.get()) != 0 and len(AnnHeadEntry.get()) !=0 and len(AnnAnnEntry.get()) !=0:
+        AddingSectionFunc()
+
+def CreateAnnouncementWindow():
+    global CreateAnnouncementwindow
+    CreateAnnouncementwindow= Toplevel(width=450, height=580, bg='white')
+
+
+def AddingAnnouncementFunc():
+    AnnouncementListInsert()
+    CreateAnnouncementwindow.destroy()
+
+def AnnouncementListInsert():
+    tree.insert(Course, 'end', text=AnnHeadEntry.get(), tag=('announcement'))
+    AddAnnouncement()
+
+def CallCreateNewAnnouncement(event):
+
+   global AnnHeadEntry,AnnAnnEntry,AnnDateEntry
+
+   CreateAnnouncementWindow()
+
+   AnnDateLabel = ttk.Label(CreateAnnouncementwindow, text ="*Announcement Date :")
+   AnnDateLabel.pack(padx=350,pady=20)
+
+   AnnDateEntry=ttk.Entry(CreateAnnouncementwindow)
+   AnnDateEntry.pack(padx=350,pady=20)
+
+   AnnHeadLabel = ttk.Label(CreateAnnouncementwindow, text ="*Announcement Head :")
+   AnnHeadLabel .pack(padx=350,pady=20)
+
+   AnnHeadEntry=ttk.Entry(CreateAnnouncementwindow)
+   AnnHeadEntry.pack(padx=350,pady=20)
+
+   AnnAnnLabel = ttk.Label(CreateAnnouncementwindow, text ="*Announcement :")
+   AnnAnnLabel.pack(padx=350,pady=20)
+
+   AnnAnnEntry=ttk.Entry(CreateAnnouncementwindow)
+   AnnAnnEntry.pack(padx=350,pady=20)
+
+   AddNewAnnouncementBttn()
+   AddNewAnnouncementButton.pack(side=BOTTOM,padx=350,pady=40)
+
+
+def AddAnnouncement():
+
+    announcement.setDate(AnnDateEntry.get())
+    announcement.setHead(AnnHeadEntry.get())
+    announcement.setAnnouncement(AnnAnnEntry.get())
+
+    #semester.get_info_from_database()
+    announcement.insertAnnouncementInDatabase(semester.getSemesterName(), course.get_courseID())
+
+
+def AnnouncementInfo():
+    AnnouncementDateLabel = ttk.Label(SecondFrame,text="Announcement Date :  " + announcement.getDate())
+    AnnouncementDateLabel.config(font=("Courier", 45),background = 'lightblue')
+    AnnouncementDateLabel.place(x=0,y=250,height=100,width = 900)
+
+    AnnouncementHeadLabel = ttk.Label(SecondFrame,text="Announcement Head :  " + announcement.getHead())
+    AnnouncementHeadLabel.place(x=0,y=350,height = 50 ,width = 900)
+    AnnouncementHeadLabel.config()
+
+    AnnouncementAnnLabel = ttk.Label(SecondFrame,text="Announcement :  "+ announcement.getAnnouncement())
+    AnnouncementAnnLabel.place(x=0,y=400,height = 50 ,width = 900)
+    AnnouncementAnnLabel.config()
+
+#------------------------------------------------------------
+
+
+#-------------------GRADE_FUNCTION-------------------------
+
+def AddNewGradeBttn():
+    global AddNewGradeButton
+    AddNewGradeButton = ttk.Button(CreateGradewindow,text= 'Add Grade',command=CheckGradeEntrys)
+
+def CheckGradeEntrys():
+    if len(GraNameEntry.get()) != 0 and len(GraPerEntry.get()) !=0:
+        AddingGradeFunc()
+
+def CreateGradeWindow():
+    global CreateGradewindow
+    CreateGradewindow= Toplevel(width=450, height=580, bg='white')
+
+
+def AddingGradeFunc():
+    GradeListInsert()
+    CreateGradewindow.destroy()
+
+def GradeListInsert():
+    tree.insert(Course, 'end', text=GraNameEntry.get(), tag=('grade'))
+    AddGrade()
+
+def CallCreateNewGrade(event):
+
+   global GraNameEntry,GraPerEntry
+
+   CreateGradeWindow()
+
+   GraNameLabel = ttk.Label(CreateGradewindow, text ="*Grade Name :")
+   GraNameLabel.pack(padx=350,pady=20)
+
+   GraNameEntry=ttk.Entry(CreateGradewindow)
+   GraNameEntry.pack(padx=350,pady=20)
+
+   GraPerLabel = ttk.Label(CreateGradewindow, text ="*Grade Percentage :")
+   GraPerLabel .pack(padx=350,pady=20)
+
+   GraPerEntry=ttk.Entry(CreateGradewindow)
+   GraPerEntry.pack(padx=350,pady=20)
+
+   AddNewGradeBttn()
+   AddNewGradeButton.pack(side=BOTTOM,padx=350,pady=40)
+
+
+def AddGrade():
+
+    grade.setGradeName(GraNameEntry.get())
+    grade.setPercentage(GraPerEntry.get())
+
+    #semester.get_info_from_database()
+    grade.insertGradeInDB(semester.getSemesterName(), course.get_courseID())
+
+
+def GradeInfo():
+    GradeNameLabel = ttk.Label(SecondFrame,text="Grade Name :  " + grade.getGradeName())
+    GradeNameLabel.config(font=("Courier", 45),background = 'lightblue')
+    GradeNameLabel.place(x=0,y=250,height=100,width = 900)
+
+    GradePercentageLabel = ttk.Label(SecondFrame,text="Grade Percentage :  " + grade.getPercentage())
+    GradePercentageLabel.place(x=0,y=350,height = 50 ,width = 900)
+    GradePercentageLabel.config()
 
 #------------------------------------------------------------
 
@@ -445,6 +586,9 @@ def OnDoubleClick(event):
             course.get_rowid_from_database(semester.getSemesterName())
             announcement.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
             announcement.get_info_from_database()
+            SemesterInfo()
+            CourseInfo()
+            AnnouncementInfo()
             # do what ever want
         elif tree.tag_has('grade', item):
             print("Yess grade")
@@ -457,6 +601,9 @@ def OnDoubleClick(event):
             course.get_rowid_from_database(semester.getSemesterName())
             grade.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
             grade.get_info_from_database()
+            SemesterInfo()
+            CourseInfo()
+            GradeInfo()
         elif tree.tag_has('student', item):
             print("Yeees student")
             student.setStudentId(tree.item(item,"text"))
@@ -502,6 +649,12 @@ def do_popup(event):
             #global popup
             popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Section", command=addSection)
+            popup.add_separator()
+            popup = Menu(root, tearoff=0)
+            popup.add_command(label="Add Announcement", command=addAnnouncement)
+            popup.add_separator()
+            popup = Menu(root, tearoff=0)
+            popup.add_command(label="Add Grade", command=addGrade)
             popup.add_separator()
 
         elif tree.tag_has('section', item):
@@ -555,6 +708,12 @@ def addCourse():
 
 def addSection():
     CallCreateNewSection(ACTIVE)
+
+def addAnnouncement():
+    CallCreateNewAnnouncement(ACTIVE)
+
+def addGrade():
+    CallCreateNewGrade(ACTIVE)
 
 
 #ChildWindow()
