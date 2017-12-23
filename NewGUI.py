@@ -25,7 +25,47 @@ student = Student()
 note = Note()
 global Sem
 
+def get_all_semester_name():
+    global Sem
+    info = semester.get_all_semester()
+    for cell in info:
+        semester.setSemesterName(cell[0])
+        semester.get_info_from_database()
+        Sem = tree.insert('', 'end', 0, text='' + semester.getSemesterName(),tag=('semester'))  # tag eklendi
+        get_all_course()
+def get_all_course():
+    global Course
+    info = course.get_all_course_in(semester.getSemesterName())
+    for cell in info:
+        course.setCourseID(cell[0])
+        course.get_info_from_database()
+        Course = tree.insert(Sem, "end", text='' + course.getCourseCode(),tag=('course'))
+        get_all_section()
+        get_all_announcement()
+        get_all_grade()
+def get_all_section():
+    global Section
+    info = section.get_all_section_in(semester.getSemesterName(), course.get_courseID())
+    for cell in info:
+        section.setSectionID(cell[0])
+        section.get_info_from_database()
+        Section = tree.insert(Course, "end", text = section.getSectionName(), tag=('section'))
+        # get_all_student()
+def get_all_announcement():
+    info = announcement.get_all_announcement_in(semester.getSemesterName(), course.get_courseID)
+    for cell in info:
+        announcement.setID(cell[0])
+        announcement.get_info_from_database()
+        tree.insert(Course, "end", text = announcement.getHead(), tag = ('announcement'))
+def get_all_grade():
+    info = grade.get_all_evaluation_in(semester.getSemesterName(), course.get_courseID)
+    for cell in info:
+        grade.setID(cell[0])
+        grade.get_info_from_database()
+        tree.insert(Course, "end", text = grade.getGradeName(), tag = ('grade'))
 
+# def get_all_student():
+# def get_all_note():
 
 #-----------------FULLSCREEN-----------------------------
 class FullScreenApp(object):
@@ -73,10 +113,10 @@ def CreateSemesterWindow():
     global CreateSemWindow
     CreateSemWindow = Toplevel(width = 450,height= 580,bg='white')
 
+
 def AddNewSmesterBttn():
     global AddNewSemesterButton
     AddNewSemesterButton = ttk.Button(CreateSemWindow,text= 'Add Semester',command=CheckSemEntrys)
-
 
 
 def CheckSemEntrys():
@@ -86,41 +126,17 @@ def CheckSemEntrys():
 
 def AddingSemFunc():
     SemesterListInsert()
-
     tree.place(width= x,height=y*3)
-
-
-
     CreateSemWindow.destroy()
 
-
-def get_all_semester_name():
-    global Sem
-    info = semester.get_all_semester()
-    for cell in info:
-        semester.setSemesterName(cell[0])
-        semester.get_info_from_database()
-        Sem = tree.insert('', 'end', 0, text='' + semester.getSemesterName(),tag=('semester'))  # tag eklendi
-        get_all_course()
-def get_all_course():
-    info = course.get_all_course_in(semester.getSemesterName())
-    for cell in info:
-        course.setCourseID(cell[0])
-        course.get_info_from_database()
-        print("Sem: ", Sem)
-        Course = tree.insert(Sem, "end", text='' + course.getCourseCode(),tag=('course'))
-
 def SemesterListInsert():
-    global Sem
-    Sem = tree.insert('', 'end', 0, text=''+SemNameEntry.get(),tag=("semester"))  # tag eklendi
-    Course = tree.insert(Sem, 'end',text='Course',tag=('course'))
-    tree.tag_bind('course','<Double-1>',CallCreateNewCourse)
-    tree.insert(Course, 'end', text='Announcements')
-    tree.insert(Course, 'end', text='Grades')
-    tree.insert(Course, 'end', text='Section')
-
-
-    SemesterInfo()
+    tree.insert('', 'end', 0, text=SemNameEntry.get(),tag=('semester'))  # tag eklendi
+    # Course = tree.insert(Sem, 'end',text='Course',tag=('course'))
+    # tree.tag_bind('course','<Double-1>',CallCreateNewCourse)
+    # tree.insert(Course, 'end', text='Announcements')
+    # tree.insert(Course, 'end', text='Grades')
+    # tree.insert(Course, 'end', text='Section')
+    AddSemester()
 
 
 def CallCreateNewSemester():
@@ -144,17 +160,15 @@ def CallCreateNewSemester():
    AddNewSmesterBttn()
    AddNewSemesterButton.pack(side=BOTTOM,padx=250,pady=40)
 
-   get_all_course()
 
-
-
-
-def SemesterInfo():
+def AddSemester():
     semester.setSemesterName(SemNameEntry.get())
     semester.setSemesterWeek(WeekEntry.get())
     semester.insertSemesterIntoDatabase()
 
-    SemesterNameLabel = ttk.Label(SecondFrame,text=" "+semester.getSemesterName())
+
+def SemesterInfo():
+    SemesterNameLabel = ttk.Label(SecondFrame,text=semester.getSemesterName())
     SemesterNameLabel.config(font=("Calibri", 55),background = 'light sky blue')
     SemesterNameLabel.place(x=0,y=0,height=150,width = 1000)
     SemesterWeekLabel = ttk.Label(SecondFrame,text=" Week Number :  "+semester.getSemesterWeek())
@@ -179,15 +193,17 @@ def CheckCourseEntrys():
         AddingCourseFunc()
 
 def CreateCourseWindow():
-    global  CreateCoursewindow
+    global CreateCoursewindow
     CreateCoursewindow= Toplevel(width=450, height=580, bg='white')
+
+
 def AddingCourseFunc():
     CourseListInsert()
     CreateCoursewindow.destroy()
 
 def CourseListInsert():
-    CourseList.insert(0, "" +CoCodeEntry.get())
-    CourseInfo()
+    tree.insert(Sem, 'end', text='' + CoCodeEntry.get(), tag=('course'))
+    AddCourse()
 
 def CallCreateNewCourse(event):
 
@@ -229,7 +245,7 @@ def CallCreateNewCourse(event):
    AddNewCourseButton.pack(side=BOTTOM,padx=350,pady=40)
 
 
-def CourseInfo():
+def AddCourse():
 
     course.setCourseName(CoNameEntry.get())
     course.setCourseCode(CoCodeEntry.get())
@@ -237,8 +253,11 @@ def CourseInfo():
     course.setRefBookName(CoRefBookEntry.get())
     course.setCourseSyllabus(SyllabusEntry.get())
 
-    semester.get_info_from_database()
+    #semester.get_info_from_database()
     course.insertCourseInDatabase(semester.getSemesterName())
+
+
+def CourseInfo():
     CourseNameLabel = ttk.Label(SecondFrame,text=" "+course.getCourseName())
     CourseNameLabel.config(font=("Courier", 45),background = 'lightblue')
     CourseNameLabel.place(x=0,y=250,height=100,width = 900)
@@ -260,7 +279,93 @@ def CourseInfo():
     SyllabusLabel.config()
 
 
+#------------------------------------------------------------
 
+
+#-------------------SECTION_FUNCTION-------------------------
+
+def AddNewSectionBttn():
+    global AddNewSectionButton
+    AddNewSectionButton = ttk.Button(CreateSectionwindow,text= 'Add Section',command=CheckSectionEntrys)
+
+def CheckSectionEntrys():
+    if len(SecNameEntry.get()) != 0 and len(SecClaEntry.get()) !=0 and len(SecHourEntry.get()) !=0 and len(SecDayEntry.get()) !=0:
+        AddingSectionFunc()
+
+def CreateSectionWindow():
+    global CreateSectionwindow
+    CreateSectionwindow= Toplevel(width=450, height=580, bg='white')
+
+
+def AddingSectionFunc():
+    SectionListInsert()
+    CreateSectionwindow.destroy()
+
+def SectionListInsert():
+    tree.insert(Course, 'end', text='' + SecClaEntry.get(), tag=('section'))
+    AddSection()
+
+def CallCreateNewSection(event):
+
+   global SecClaEntry,SecHourEntry,SecNameEntry,SecDayEntry
+
+   CreateSectionWindow()
+
+   SecNameLabel = ttk.Label(CreateSectionwindow, text ="*Section Name :")
+   SecNameLabel.pack(padx=350,pady=20)
+
+   SecNameEntry=ttk.Entry(CreateSectionwindow)
+   SecNameEntry.pack(padx=350,pady=20)
+
+   SecClaLabel = ttk.Label(CreateSectionwindow, text ="*Section Class :")
+   SecClaLabel .pack(padx=350,pady=20)
+
+   SecClaEntry=ttk.Entry(CreateSectionwindow)
+   SecClaEntry.pack(padx=350,pady=20)
+
+   SecHourLabel = ttk.Label(CreateSectionwindow, text ="*Section Hour :")
+   SecHourLabel.pack(padx=350,pady=20)
+
+   SecHourEntry=ttk.Entry(CreateSectionwindow)
+   SecHourEntry.pack(padx=350,pady=20)
+
+   SecDayBookLabel = ttk.Label(CreateSectionwindow, text ="*Section Day :")
+   SecDayBookLabel.pack(padx=350,pady=20)
+
+   SecDayEntry=ttk.Entry(CreateSectionwindow)
+   SecDayEntry.pack(padx=350,pady=20)
+
+   AddNewSectionBttn()
+   AddNewSectionButton.pack(side=BOTTOM,padx=350,pady=40)
+
+
+def AddSection():
+
+    section.setSectionName(SecNameEntry.get())
+    section.setClassRoom(SecClaEntry.get())
+    section.setHour(SecHourEntry.get())
+    section.setDay(SecDayEntry.get())
+
+    #semester.get_info_from_database()
+    section.insertSectionInDatabase(semester.getSemesterName(), course.get_courseID)
+
+
+def SectionInfo():
+    SectionNameLabel = ttk.Label(SecondFrame,text="Section Name :  " + section.getSectionName())
+    SectionNameLabel.config(font=("Courier", 45),background = 'lightblue')
+    SectionNameLabel.place(x=0,y=250,height=100,width = 900)
+
+    SectionClassLabel = ttk.Label(SecondFrame,text="Section Class :  " + section.getClassRoom())
+    SectionClassLabel.place(x=0,y=350,height = 50 ,width = 900)
+    SectionClassLabel.config()
+
+    SectionHourLabel = ttk.Label(SecondFrame,text="Section Hour :  "+section.getHour())
+    SectionHourLabel.place(x=0,y=400,height = 50 ,width = 900)
+    SectionHourLabel.config()
+
+    SectionDayLabel = ttk.Label(SecondFrame,text="Section Day :  " + section.getDay())
+    SectionDayLabel.place(x=0,y=450,height = 50 ,width = 900)
+    SectionDayLabel.config()
 
 
 
@@ -299,49 +404,18 @@ def OnDoubleClick(event):
         print("you clicked on", tree.item(item,"text"))
         if tree.tag_has("semester",item):
             print("Yes semester!!")
-
             semester.setSemesterName(tree.item(item,"text"))
-            semester.setSemesterWeek(tree.item(item,"text"))
             semester.get_info_from_database()
-            SemesterNameLabel = ttk.Label(SecondFrame,text=" "+semester.getSemesterName())
-            SemesterNameLabel.config(font=("Calibri", 55),background = 'light sky blue')
-            SemesterNameLabel.place(x=0,y=0,height=150,width = 1000)
-            SemesterWeekLabel = ttk.Label(SecondFrame,text=" Week Number :  "+semester.getSemesterWeek())
-            SemesterWeekLabel.place(x=0,y=150,height = 100 ,width = 900)
-            SemesterWeekLabel.config(font=("Arial"))
+            SemesterInfo()
         elif tree.tag_has('course', item):
             print("Yess course!!")
             # Once dersin kodunu tanimlamaliyiz cunku 2. fonksyionda courseID yi bulmamız için ihtiyacımız olacak
-            course.setCourseCode(tree.item(item,"text"))
-            course.setCourseName(tree.item(item,"text"))
-            course.setCourseSyllabus(tree.item(item,"text"))
-            course.setCourseBook(tree.item(item,"text"))
-            course.setRefBookName(tree.item(item,"text"))
-
+            course.setCourseCode(tree.item(item, "text"))
             parent = tree.parent(item)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             course.get_info_from_database()
-
-            CourseNameLabel = ttk.Label(SecondFrame,text=" "+course.getCourseName())
-            CourseNameLabel.config(font=("Courier", 45),background = 'lightblue')
-            CourseNameLabel.place(x=0,y=250,height=100,width = 900)
-
-            CourseCodeLabel = ttk.Label(SecondFrame,text="Course Code :  "+course.getCourseCode())
-            CourseCodeLabel.place(x=0,y=350,height = 50 ,width = 900)
-            CourseCodeLabel.config()
-
-            CourseBookLabel = ttk.Label(SecondFrame,text="Course Book :  "+course.getCourseBook())
-            CourseBookLabel.place(x=0,y=400,height = 50 ,width = 900)
-            CourseBookLabel.config()
-
-            CourseRefBookLabel = ttk.Label(SecondFrame,text="Course Referance Book :  "+course.getRefBookName())
-            CourseRefBookLabel.place(x=0,y=450,height = 50 ,width = 900)
-            CourseRefBookLabel.config()
-
-            SyllabusLabel = ttk.Label(SecondFrame,text="Syllabus :  "+course.getSyllabus())
-            SyllabusLabel.place(x=0,y=500,height = 50 ,width = 900)
-            SyllabusLabel.config()
+            CourseInfo()
         elif tree.tag_has('section', item):
             print("Yess section!")
             # Once section name i almamız gerekiyor, rowid icin gerekli
@@ -353,7 +427,39 @@ def OnDoubleClick(event):
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
-
+            section.get_info_from_database()
+            # do whatever want
+        elif tree.tag_has('announcement', item):
+            print("Yess announcement")
+            announcement.setID(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            announcement.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
+            announcement.get_info_from_database()
+            # do what ever want
+        elif tree.tag_has('grade', item):
+            print("Yess grade")
+            grade.setID(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            grade.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
+            grade.get_info_from_database()
+        elif tree.tag_has('student', item):
+            print("Yeees student")
+            student.setStudentId(tree.item(item,"text"))
+            student.get_info_from_database()
+        # elif tree.tag_has('note',item):
+        #     print("Yeees note!")
+        #     note.setHead(tree.item(item,"text"))
+        # student grade kaldı
 
 
 tree = ttk.Treeview(FirstFrame)
