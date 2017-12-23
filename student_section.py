@@ -48,7 +48,7 @@ class Grade:
         db_fonk.delete_evaluation(self.ID)
 
     # This function return rowid of evaluations which are in given semester and course
-    def gel_all_evaluation_in(self, semesterName, courseID):
+    def get_all_evaluation_in(self, semesterName, courseID):
         return db_fonk.select_all_evaluation_in(semesterName, courseID)
 
 
@@ -118,9 +118,10 @@ class Section:
 
     # This function is working ok, but how do you know that these student which are added is in this semester, course
     # and section?
-    def importStudent(self,semID,courseID):
+    def importStudent(self, semID, courseID, directory):
         tempStudents = []
-        file = open('students.csv', "r")
+        newdir = str(directory) + "\students.csv"
+        file = open(newdir, "r")
         read = csv.reader(file)
         for row in read:
             for i in row:
@@ -130,7 +131,7 @@ class Section:
                 tempStudents.append(a)
         for x in tempStudents:
             db_fonk.insert_student(x[0], x[1])
-            db_fonk.insert_studentin(semID,courseID,self.sectionID,x[1])
+            db_fonk.insert_studentin(semID,courseID,self.sectionID, x[0])
             db_fonk.save_changes()
 
 
@@ -189,6 +190,9 @@ class Student():
 
     def get_student_evaluation_info_from_database(self, semesterName, courseID, evaluationID):
         self.grade = db_fonk.select_studentEvaluation_in(semesterName, courseID, evaluationID, self.studentId)
+
+    def get_evaluationID_from_studentGrade_in(self, semesterName, courseID):
+        return db_fonk.select_evaluationID_studentEvaluation_in(semesterName, courseID, self.studentId)
 
 
 class Note:
