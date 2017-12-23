@@ -52,13 +52,13 @@ def get_all_section():
         Section = tree.insert(Course, "end", text = section.getSectionName(), tag=('section'))
         # get_all_student()
 def get_all_announcement():
-    info = announcement.get_all_announcement_in(semester.getSemesterName(), course.get_courseID)
+    info = announcement.get_all_announcement_in(semester.getSemesterName(), course.get_courseID())
     for cell in info:
         announcement.setID(cell[0])
         announcement.get_info_from_database()
         tree.insert(Course, "end", text = announcement.getHead(), tag = ('announcement'))
 def get_all_grade():
-    info = grade.get_all_evaluation_in(semester.getSemesterName(), course.get_courseID)
+    info = grade.get_all_evaluation_in(semester.getSemesterName(), course.get_courseID())
     for cell in info:
         grade.setID(cell[0])
         grade.get_info_from_database()
@@ -347,7 +347,7 @@ def AddSection():
     section.setDay(SecDayEntry.get())
 
     #semester.get_info_from_database()
-    section.insertSectionInDatabase(semester.getSemesterName(), course.get_courseID)
+    section.insertSectionInDatabase(semester.getSemesterName(), course.get_courseID())
 
 
 def SectionInfo():
@@ -415,6 +415,7 @@ def OnDoubleClick(event):
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             course.get_info_from_database()
+            SemesterInfo()
             CourseInfo()
         elif tree.tag_has('section', item):
             print("Yess section!")
@@ -423,11 +424,15 @@ def OnDoubleClick(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
+            print("you clicked on", tree.item(item, "text"))
             course.get_rowid_from_database(semester.getSemesterName())
             section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
             section.get_info_from_database()
+            SemesterInfo()
+            CourseInfo()
+            SectionInfo()
             # do whatever want
         elif tree.tag_has('announcement', item):
             print("Yess announcement")
@@ -461,36 +466,102 @@ def OnDoubleClick(event):
         #     note.setHead(tree.item(item,"text"))
         # student grade kaldı
 
-def ChildWindow():
 
-        global popup
-        popup = Menu(root, tearoff=0)
-        popup.add_command(label="Add Course", command=selection)
-        popup.add_separator()
+#---------------------------------------------------------------------
+
+# def ChildWindow():
+#     global popup
+#     popup = Menu(root, tearoff=0)
+#     popup.add_command(label="Add Course", command=selection)
+#     popup.add_separator()
+
 
 def do_popup(event):
-            # display the popup menu
-            try:
-                popup.selections = tree.item(tree.identify_row(event.y))
-                popup.post(event.x_root, event.y_root)
-            finally:
-                popup.grab_release()
+    # display the popup menu
+    try:
+        item = tree.selection()[0]
+        print("you clicked on", tree.item(item,"text"))
+        if tree.tag_has("semester",item):
+            global Sem
+            Sem = item
+            print("Yes semester!!")
+            semester.setSemesterName(tree.item(item,"text"))
+            global popup
+            popup = Menu(root, tearoff=0)
+            popup.add_command(label="Add Course", command=addCourse)
+            popup.add_separator()
+        elif tree.tag_has('course', item):
+            global Course
+            Course = item
+            print("Yess course!!")
+            # Once dersin kodunu tanimlamaliyiz cunku 2. fonksyionda courseID yi bulmamız için ihtiyacımız olacak
+            course.setCourseCode(tree.item(item, "text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            #global popup
+            popup = Menu(root, tearoff=0)
+            popup.add_command(label="Add Section", command=addSection)
+            popup.add_separator()
 
-def selection():
-        print (popup.selections)
+        elif tree.tag_has('section', item):
+            print("Yess section!")
+            # Once section name i almamız gerekiyor, rowid icin gerekli
+            section.setSectionName(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
 
-        CallCreateNewCourse(ACTIVE)
+            # do whatever want
+        elif tree.tag_has('announcement', item):
+            print("Yess announcement")
+            announcement.setID(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            announcement.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
+
+            # do what ever want
+        elif tree.tag_has('grade', item):
+            print("Yess grade")
+            grade.setID(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            grade.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
+
+        elif tree.tag_has('student', item):
+            print("Yeees student")
+            student.setStudentId(tree.item(item,"text"))
+
+        popup.selections = tree.item(tree.identify_row(event.y))
+        popup.post(event.x_root, event.y_root)
+    finally:
+        popup.grab_release()
 
 
-ChildWindow()
+def addCourse():
+    CallCreateNewCourse(ACTIVE)
 
+def addSection():
+    CallCreateNewSection(ACTIVE)
+
+
+#ChildWindow()
 
 tree = ttk.Treeview(FirstFrame)
 tree.bind("<Button-3>", do_popup)
 tree.place(x=0,y=0,width= 500,height=y*3)
-tree.bind("<Double-1>", OnDoubleClick)
-
-
 
 
 tree.bind("<Double-1>", OnDoubleClick)
