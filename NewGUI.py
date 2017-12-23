@@ -461,9 +461,36 @@ def OnDoubleClick(event):
         #     note.setHead(tree.item(item,"text"))
         # student grade kaldı
 
+def ChildWindow():
+
+        global popup
+        popup = Menu(root, tearoff=0)
+        popup.add_command(label="Add Course", command=selection)
+        popup.add_separator()
+
+def do_popup(event):
+            # display the popup menu
+            try:
+                popup.selections = tree.item(tree.identify_row(event.y))
+                popup.post(event.x_root, event.y_root)
+            finally:
+                popup.grab_release()
+
+def selection():
+        print (popup.selections)
+
+        CallCreateNewCourse(ACTIVE)
+
+
+ChildWindow()
+
 
 tree = ttk.Treeview(FirstFrame)
+tree.bind("<Button-3>", do_popup)
 tree.place(x=0,y=0,width= 500,height=y*3)
+tree.bind("<Double-1>", OnDoubleClick)
+
+
 
 
 tree.bind("<Double-1>", OnDoubleClick)
