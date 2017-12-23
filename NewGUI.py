@@ -637,6 +637,8 @@ def do_popup(event):
             popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Course", command=addCourse)
             popup.add_separator()
+
+
         elif tree.tag_has('course', item):
             global Course
             Course = item
@@ -649,13 +651,9 @@ def do_popup(event):
             #global popup
             popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Section", command=addSection)
-            popup.add_separator()
-            popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Announcement", command=addAnnouncement)
-            popup.add_separator()
-            popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Grade", command=addGrade)
-            popup.add_separator()
+
 
         elif tree.tag_has('section', item):
             print("Yess section!")
