@@ -299,12 +299,63 @@ def OnDoubleClick(event):
         print("you clicked on", tree.item(item,"text"))
         if tree.tag_has("semester",item):
             print("Yes semester!!")
+
             semester.setSemesterName(tree.item(item,"text"))
+            semester.setSemesterWeek(tree.item(item,"text"))
+            semester.get_info_from_database()
+            SemesterNameLabel = ttk.Label(SecondFrame,text=" "+semester.getSemesterName())
+            SemesterNameLabel.config(font=("Calibri", 55),background = 'light sky blue')
+            SemesterNameLabel.place(x=0,y=0,height=150,width = 1000)
+            SemesterWeekLabel = ttk.Label(SecondFrame,text=" Week Number :  "+semester.getSemesterWeek())
+            SemesterWeekLabel.place(x=0,y=150,height = 100 ,width = 900)
+            SemesterWeekLabel.config(font=("Arial"))
+        elif tree.tag_has('course', item):
+            print("Yess course!!")
+            # Once dersin kodunu tanimlamaliyiz cunku 2. fonksyionda courseID yi bulmamız için ihtiyacımız olacak
+            course.setCourseCode(tree.item(item,"text"))
+            course.setCourseName(tree.item(item,"text"))
+            course.setCourseSyllabus(tree.item(item,"text"))
+            course.setCourseBook(tree.item(item,"text"))
+            course.setRefBookName(tree.item(item,"text"))
+
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            course.get_info_from_database()
+
+            CourseNameLabel = ttk.Label(SecondFrame,text=" "+course.getCourseName())
+            CourseNameLabel.config(font=("Courier", 45),background = 'lightblue')
+            CourseNameLabel.place(x=0,y=250,height=100,width = 900)
+
+            CourseCodeLabel = ttk.Label(SecondFrame,text="Course Code :  "+course.getCourseCode())
+            CourseCodeLabel.place(x=0,y=350,height = 50 ,width = 900)
+            CourseCodeLabel.config()
+
+            CourseBookLabel = ttk.Label(SecondFrame,text="Course Book :  "+course.getCourseBook())
+            CourseBookLabel.place(x=0,y=400,height = 50 ,width = 900)
+            CourseBookLabel.config()
+
+            CourseRefBookLabel = ttk.Label(SecondFrame,text="Course Referance Book :  "+course.getRefBookName())
+            CourseRefBookLabel.place(x=0,y=450,height = 50 ,width = 900)
+            CourseRefBookLabel.config()
+
+            SyllabusLabel = ttk.Label(SecondFrame,text="Syllabus :  "+course.getSyllabus())
+            SyllabusLabel.place(x=0,y=500,height = 50 ,width = 900)
+            SyllabusLabel.config()
+        elif tree.tag_has('section', item):
+            print("Yess section!")
+            # Once section name i almamız gerekiyor, rowid icin gerekli
+            section.setSectionName(tree.item(item,"text"))
+            # Course a gider
+            parent = tree.parent(item)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(item)
+            semester.setSemesterName(tree.item(parent,"text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
 
 
 
-CourseList = Listbox()
-SemesterList = Listbox()
 tree = ttk.Treeview(FirstFrame)
 tree.place(x=0,y=0,width= 500,height=y*3)
 
