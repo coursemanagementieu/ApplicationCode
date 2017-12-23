@@ -17,6 +17,13 @@ y = root.winfo_screenheight()/3
 
 semester = Semester()
 course = Course()
+section = Section()
+announcement = Announcement()
+subject = Subject()
+grade = Grade()
+student = Student()
+note = Note()
+global Sem
 
 
 
@@ -86,24 +93,27 @@ def AddingSemFunc():
 
     CreateSemWindow.destroy()
 
+
 def get_all_semester_name():
+    global Sem
     info = semester.get_all_semester()
     for cell in info:
         semester.setSemesterName(cell[0])
         semester.get_info_from_database()
-        Sem = tree.insert('', 'end', 0, text='' + semester.getSemesterName())
+        Sem = tree.insert('', 'end', 0, text='' + semester.getSemesterName(),tag=('semester'))  # tag eklendi
+        get_all_course()
 def get_all_course():
     info = course.get_all_course_in(semester.getSemesterName())
     for cell in info:
         course.setCourseID(cell[0])
         course.get_info_from_database()
-        Course = tree.insert(Sem, 'end', text='Course',tags=('course'))
+        print("Sem: ", Sem)
+        Course = tree.insert(Sem, "end", text='' + course.getCourseCode(),tag=('course'))
 
 def SemesterListInsert():
     global Sem
-
-    Sem = tree.insert('', 'end', 0, text=''+SemNameEntry.get())
-    Course = tree.insert(Sem, 'end', text='Course',tags=('course'))
+    Sem = tree.insert('', 'end', 0, text=''+SemNameEntry.get(),tag=("semester"))  # tag eklendi
+    Course = tree.insert(Sem, 'end',text='Course',tag=('course'))
     tree.tag_bind('course','<Double-1>',CallCreateNewCourse)
     tree.insert(Course, 'end', text='Announcements')
     tree.insert(Course, 'end', text='Grades')
@@ -125,7 +135,7 @@ def CallCreateNewSemester():
    SemNameEntry=ttk.Entry(CreateSemWindow)
    SemNameEntry.pack(padx=250,pady=20)
 
-   WeekLabel = ttk.Label(CreateSemWindow,text ="*Week :" ,font='Arial')
+   WeekLabel = ttk.Label(CreateSemWindow,text ="Week :" ,font='Arial')
    WeekLabel.pack(padx=250,pady=20)
 
    WeekEntry=ttk.Entry(CreateSemWindow)
@@ -287,6 +297,9 @@ menubar.add_cascade(label="Help", menu=helpmenu)
 def OnDoubleClick(event):
         item = tree.selection()[0]
         print("you clicked on", tree.item(item,"text"))
+        if tree.tag_has("semester",item):
+            print("Yes semester!!")
+            semester.setSemesterName(tree.item(item,"text"))
 
 
 
@@ -304,4 +317,3 @@ app= FullScreenApp(root)
 root.config(menu=menubar)
 root.resizable(0,0)
 root.mainloop()
-
