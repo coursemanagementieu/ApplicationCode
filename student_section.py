@@ -118,9 +118,10 @@ class Section:
 
     # This function is working ok, but how do you know that these student which are added is in this semester, course
     # and section?
-    def importStudent(self, semID, courseID):
+    def importStudent(self, semID, courseID, directory):
         tempStudents = []
-        file = open('students.csv', "r")
+        newdir = str(directory) + "\students.csv"
+        file = open(newdir, "r")
         read = csv.reader(file)
         for row in read:
             for i in row:
@@ -130,7 +131,7 @@ class Section:
                 tempStudents.append(a)
         for x in tempStudents:
             db_fonk.insert_student(x[0], x[1])
-            db_fonk.insert_studentin(semID,courseID,self.sectionID,x[1])
+            db_fonk.insert_studentin(semID,courseID,self.sectionID, x[0])
             db_fonk.save_changes()
 
 
