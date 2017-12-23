@@ -98,7 +98,7 @@ FirstFrame.pack(expand=0,side=LEFT)
 #---------------------------------------------------------
 
 #---------------------SECOND_FRAME------------------------
-SecondFrame = Frame(root,width=x*2, height=y*3, bg='gray91')
+SecondFrame = Frame(root,width=x*3, height=y*3, bg='gray91')
 SecondFrame.propagate(0)
 SecondFrame.place(x=x,y=0)
 
@@ -173,11 +173,11 @@ def AddSemester():
 
 
 def SemesterInfo():
-    SemesterNameLabel = ttk.Label(SecondFrame,text=semester.getSemesterName())
+    SemesterNameLabel = ttk.Label(SecondFrame,text="       "+semester.getSemesterName())
     SemesterNameLabel.config(font=("Calibri", 55),background = 'light sky blue')
-    SemesterNameLabel.place(x=0,y=0,height=150,width = 1000)
+    SemesterNameLabel.place(x=0,y=0,height=150,width = x*3)
     SemesterWeekLabel = ttk.Label(SecondFrame,text=" Week Number :  "+semester.getSemesterWeek())
-    SemesterWeekLabel.place(x=0,y=150,height = 100 ,width = 900)
+    SemesterWeekLabel.place(x=0,y=150,height = 100 ,width = x*3)
     SemesterWeekLabel.config(font=("Arial"))
 
 
@@ -263,24 +263,24 @@ def AddCourse():
 
 
 def CourseInfo():
-    CourseNameLabel = ttk.Label(SecondFrame,text=" "+course.getCourseName())
-    CourseNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    CourseNameLabel.place(x=0,y=250,height=100,width = 900)
+    CourseNameLabel = ttk.Label(SecondFrame,text="       "+course.getCourseName())
+    CourseNameLabel.config(font=("Courier", 35),background = 'lightblue')
+    CourseNameLabel.place(x=0,y=250,height=100,width = x*3)
 
     CourseCodeLabel = ttk.Label(SecondFrame,text="Course Code :  "+course.getCourseCode())
-    CourseCodeLabel.place(x=0,y=350,height = 50 ,width = 900)
+    CourseCodeLabel.place(x=0,y=350,height = 50 ,width = x*3)
     CourseCodeLabel.config()
 
     CourseBookLabel = ttk.Label(SecondFrame,text="Course Book :  "+course.getCourseBook())
-    CourseBookLabel.place(x=0,y=400,height = 50 ,width = 900)
+    CourseBookLabel.place(x=0,y=400,height = 50 ,width = x*3)
     CourseBookLabel.config()
 
     CourseRefBookLabel = ttk.Label(SecondFrame,text="Course Referance Book :  "+course.getRefBookName())
-    CourseRefBookLabel.place(x=0,y=450,height = 50 ,width = 900)
+    CourseRefBookLabel.place(x=0,y=450,height = 50 ,width = x*3)
     CourseRefBookLabel.config()
 
     SyllabusLabel = ttk.Label(SecondFrame,text="Syllabus :  "+course.getSyllabus())
-    SyllabusLabel.place(x=0,y=500,height = 50 ,width = 900)
+    SyllabusLabel.place(x=0,y=500,height = 50 ,width = x*3)
     SyllabusLabel.config()
 
 
@@ -357,19 +357,19 @@ def AddSection():
 
 def SectionInfo():
     SectionNameLabel = ttk.Label(SecondFrame,text="Section Name :  " + section.getSectionName())
-    SectionNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    SectionNameLabel.place(x=0,y=250,height=100,width = 900)
+    SectionNameLabel.config(font=("Courier", 20),background = 'lightblue')
+    SectionNameLabel.place(x=0,y=550,height=100,width = x*1.5)
 
     SectionClassLabel = ttk.Label(SecondFrame,text="Section Class :  " + section.getClassRoom())
-    SectionClassLabel.place(x=0,y=350,height = 50 ,width = 900)
+    SectionClassLabel.place(x=0,y=650,height = 50 ,width = x*1.5)
     SectionClassLabel.config()
 
     SectionHourLabel = ttk.Label(SecondFrame,text="Section Hour :  "+section.getHour())
-    SectionHourLabel.place(x=0,y=400,height = 50 ,width = 900)
+    SectionHourLabel.place(x=0,y=700,height = 50 ,width = x*1.5)
     SectionHourLabel.config()
 
     SectionDayLabel = ttk.Label(SecondFrame,text="Section Day :  " + section.getDay())
-    SectionDayLabel.place(x=0,y=450,height = 50 ,width = 900)
+    SectionDayLabel.place(x=0,y=750,height = 50 ,width = x*1.5)
     SectionDayLabel.config()
 
 
@@ -440,15 +440,15 @@ def AddAnnouncement():
 
 def AnnouncementInfo():
     AnnouncementDateLabel = ttk.Label(SecondFrame,text="Announcement Date :  " + announcement.getDate())
-    AnnouncementDateLabel.config(font=("Courier", 45),background = 'lightblue')
-    AnnouncementDateLabel.place(x=0,y=250,height=100,width = 900)
+    AnnouncementDateLabel.config(font=("Courier", 20),background = 'lightblue')
+    AnnouncementDateLabel.place(x=0,y=800,height=60,width = x*3)
 
     AnnouncementHeadLabel = ttk.Label(SecondFrame,text="Announcement Head :  " + announcement.getHead())
-    AnnouncementHeadLabel.place(x=0,y=350,height = 50 ,width = 900)
+    AnnouncementHeadLabel.place(x=0,y=860,height = 50 ,width = x*3)
     AnnouncementHeadLabel.config()
 
     AnnouncementAnnLabel = ttk.Label(SecondFrame,text="Announcement :  "+ announcement.getAnnouncement())
-    AnnouncementAnnLabel.place(x=0,y=400,height = 50 ,width = 900)
+    AnnouncementAnnLabel.place(x=0,y=910,height = 50 ,width = x*3)
     AnnouncementAnnLabel.config()
 
 #------------------------------------------------------------
@@ -510,11 +510,11 @@ def AddGrade():
 
 def GradeInfo():
     GradeNameLabel = ttk.Label(SecondFrame,text="Grade Name :  " + grade.getGradeName())
-    GradeNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    GradeNameLabel.place(x=0,y=250,height=100,width = 900)
+    GradeNameLabel.config(font=("Courier", 25),background = 'lightblue')
+    GradeNameLabel.place(x=x*1.5,y=550,height=100,width = x*1.5)
 
     GradePercentageLabel = ttk.Label(SecondFrame,text="Grade Percentage :  " + str(grade.getPercentage()))
-    GradePercentageLabel.place(x=0,y=350,height = 50 ,width = 900)
+    GradePercentageLabel.place(x=x*1.5,y=650,height = 150 ,width = x*1.5)
     GradePercentageLabel.config()
 
 #------------------------------------------------------------
@@ -566,10 +566,10 @@ def AddStudent():
 def StudentInfo():
     StudentNameLabel = ttk.Label(SecondFrame,text="Student Name :  " + student.getStudentName())
     StudentNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    StudentNameLabel.place(x=0,y=250,height=100,width = 900)
+    StudentNameLabel.place(x=x*4,y=0,height=y*3,width = x)
 
     StudentIDLabel = ttk.Label(SecondFrame,text="Student ID:  " + student.getStudentId())
-    StudentIDLabel.place(x=0,y=350,height = 50 ,width = 900)
+    StudentIDLabel.place(x=x*4,y=0,height = y*3 ,width = x)
     StudentIDLabel.config()
 
 
