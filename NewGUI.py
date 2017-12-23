@@ -98,9 +98,13 @@ FirstFrame.pack(expand=0,side=LEFT)
 #---------------------------------------------------------
 
 #---------------------SECOND_FRAME------------------------
-SecondFrame = Frame(root,width=x*3, height=y*3, bg='gray91')
+SecondFrame = Frame(root,width=x*3, height=y*3, bg='white')
 SecondFrame.propagate(0)
 SecondFrame.place(x=x,y=0)
+
+ThirdFrame = Frame(root,width=x*1, height=y*3, bg='white')
+ThirdFrame.propagate(0)
+ThirdFrame.place(x=x*4,y=0)
 
 
 
@@ -439,16 +443,16 @@ def AddAnnouncement():
 
 
 def AnnouncementInfo():
-    AnnouncementDateLabel = ttk.Label(SecondFrame,text="Announcement Date :  " + announcement.getDate())
-    AnnouncementDateLabel.config(font=("Courier", 20),background = 'lightblue')
-    AnnouncementDateLabel.place(x=0,y=800,height=60,width = x*3)
+    AnnouncementDateLabel = ttk.Label(ThirdFrame,text="Announcement Date :  " + announcement.getDate())
+    AnnouncementDateLabel.config(font=("Courier", 10),background = 'lightblue')
+    AnnouncementDateLabel.place(x=0,y=0,height=60,width = x)
 
-    AnnouncementHeadLabel = ttk.Label(SecondFrame,text="Announcement Head :  " + announcement.getHead())
-    AnnouncementHeadLabel.place(x=0,y=860,height = 50 ,width = x*3)
+    AnnouncementHeadLabel = ttk.Label(ThirdFrame,text="Announcement Head :  " + announcement.getHead())
+    AnnouncementHeadLabel.place(x=0,y=60,height = 50 ,width = x)
     AnnouncementHeadLabel.config()
 
-    AnnouncementAnnLabel = ttk.Label(SecondFrame,text="Announcement :  "+ announcement.getAnnouncement())
-    AnnouncementAnnLabel.place(x=0,y=910,height = 50 ,width = x*3)
+    AnnouncementAnnLabel = ttk.Label(ThirdFrame,text="Announcement :  "+ announcement.getAnnouncement())
+    AnnouncementAnnLabel.place(x=0,y=110,height = 50 ,width = x)
     AnnouncementAnnLabel.config()
 
 #------------------------------------------------------------
@@ -564,12 +568,12 @@ def AddStudent():
 
 # INFO
 def StudentInfo():
-    StudentNameLabel = ttk.Label(SecondFrame,text="Student Name :  " + student.getStudentName())
-    StudentNameLabel.config(font=("Courier", 45),background = 'lightblue')
-    StudentNameLabel.place(x=x*4,y=0,height=y*3,width = x)
+    StudentNameLabel = ttk.Label(ThirdFrame,text="Student Name :  " + student.getStudentName())
+    StudentNameLabel.config(font=("Courier", 25),background = 'lightblue')
+    StudentNameLabel.place(x=x*4,y=160,height=60,width = x)
 
-    StudentIDLabel = ttk.Label(SecondFrame,text="Student ID:  " + student.getStudentId())
-    StudentIDLabel.place(x=x*4,y=0,height = y*3 ,width = x)
+    StudentIDLabel = ttk.Label(ThirdFrame,text="Student ID:  " + student.getStudentId())
+    StudentIDLabel.place(x=x*4,y=0,height =60 ,width = x)
     StudentIDLabel.config()
 
 
@@ -668,11 +672,21 @@ def OnDoubleClick(event):
             print("Yeees student")
             student.setStudentId(tree.item(item,"text"))
             student.get_info_from_database()
+            parent = tree.parent(item)
+            section.setSectionName(tree.item(parent,"text"))
+            # Course a gider
+            parent = tree.parent(parent)
+            course.setCourseCode(tree.item(parent,"text"))
+            parent = tree.parent(parent)
+            semester.setSemesterName(tree.item(parent,"text"))
+            print("you clicked on", tree.item(item, "text"))
+            course.get_rowid_from_database(semester.getSemesterName())
+            section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
+            section.get_info_from_database()
+            SemesterInfo()
+            CourseInfo()
+            SectionInfo()
             StudentInfo()
-        # elif tree.tag_has('note',item):
-        #     print("Yeees note!")
-        #     note.setHead(tree.item(item,"text"))
-        # student grade kaldı
 
 
 #---------------------------------------------------------------------
@@ -787,6 +801,7 @@ def addStudent():
 tree = ttk.Treeview(FirstFrame)
 tree.bind("<Button-3>", do_popup)
 tree.place(x=0,y=0,width= 500,height=y*3)
+
 
 
 tree.bind("<Double-1>", OnDoubleClick)
