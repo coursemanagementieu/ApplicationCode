@@ -380,7 +380,7 @@ def AddNewAnnouncementBttn():
 
 def CheckAnnouncementEntrys():
     if len(AnnDateEntry.get()) != 0 and len(AnnHeadEntry.get()) !=0 and len(AnnAnnEntry.get()) !=0:
-        AddingSectionFunc()
+        AddingAnnouncementFunc()
 
 def CreateAnnouncementWindow():
     global CreateAnnouncementwindow
@@ -517,12 +517,11 @@ def GradeInfo():
 
 def AddNewStudentBttn():
     global AddNewStudentButton
-    AddNewStudentButton = ttk.Button(CreateStudentwindow,text= 'Add Student: ',command=CheckStudentEntrys)
+    AddNewStudentButton = ttk.Button(CreateStudentwindow,text= 'Add Student',command=CheckStudentEntrys)
 
 def CheckStudentEntrys():
     if len(DirectoryEntry.get()) != 0:
         AddingStudentFunc()
-
 
 def CreateStudentWindow():
     global CreateStudentwindow
@@ -530,36 +529,43 @@ def CreateStudentWindow():
 
 
 def AddingStudentFunc():
-    AddStudent()
+    StudentListInsert()
     CreateStudentwindow.destroy()
 
+def StudentListInsert():
+    tree.insert(Section, 'end', text=DirectoryEntry.get(), tag=('student'))
+    AddStudent()
 
 def CallCreateNewStudent(event):
-    global DirectoryEntry
-    CreateStudentWindow()
-    DirectoryLabel = ttk.Label(CreateStudentwindow, text="*Directory :")
-    DirectoryLabel.pack(padx=350, pady=20)
 
-    DirectoryEntry = ttk.Entry(CreateStudentwindow)
-    DirectoryEntry.pack(padx=350, pady=20)
+   global DirectoryEntry
 
-    AddNewStudentBttn()
-    AddNewStudentButton.pack(side=BOTTOM,padx=350,pady=40)
+   CreateStudentWindow()
+
+   DirectoryLabel = ttk.Label(CreateStudentwindow, text ="Directory :")
+   DirectoryLabel.pack(padx=350,pady=20)
+
+   DirectoryEntry=ttk.Entry(CreateStudentwindow)
+   DirectoryEntry.pack(padx=350,pady=20)
+
+
+   AddNewStudentBttn()
+   AddNewStudentButton.pack(side=BOTTOM,padx=350,pady=40)
 
 
 def AddStudent():
-    section.importStudent(semester.getSemesterName(), course.get_courseID(),DirectoryEntry)
 
+    section.importStudent(semester.getSemesterName(), course.get_courseID(), DirectoryEntry.get())
 
+# INFO
 def StudentInfo():
     StudentNameLabel = ttk.Label(SecondFrame,text="Student Name :  " + student.getStudentName())
     StudentNameLabel.config(font=("Courier", 45),background = 'lightblue')
     StudentNameLabel.place(x=0,y=250,height=100,width = 900)
 
-    StudentIDLabel = ttk.Label(SecondFrame,text="StudentID :  " + student.getStudentId())
+    StudentIDLabel = ttk.Label(SecondFrame,text="Student ID:  " + student.getStudentId())
     StudentIDLabel.place(x=0,y=350,height = 50 ,width = 900)
     StudentIDLabel.config()
-
 
 
 #------------MAIN----------------------------
@@ -627,7 +633,7 @@ def OnDoubleClick(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             announcement.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
@@ -642,13 +648,15 @@ def OnDoubleClick(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             grade.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
             grade.get_info_from_database()
             SemesterInfo()
             CourseInfo()
+            print(grade.getPercentage())
+            print(grade.getGradeName())
             GradeInfo()
 
         elif tree.tag_has('student', item):
@@ -694,22 +702,10 @@ def do_popup(event):
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             #global popup
-            # popup = Menu(root, tearoff=0)
-            # popup.add_command(label="Add Section", command=addSection)
-            # popup.add_separator()
-            # popup = Menu(root, tearoff=0)
-            # popup.add_command(label="Add Announcement", command=addAnnouncement)
-            # popup.add_separator()
-            # popup = Menu(root, tearoff=0)
-            # popup.add_command(label="Add Grade", command=addGrade)
-            # popup.add_separator()
             popup = Menu(root, tearoff=0)
             popup.add_command(label="Add Section", command=addSection)
-            popup.add_separator()
             popup.add_command(label="Add Announcement", command=addAnnouncement)
-            popup.add_separator()
             popup.add_command(label="Add Grade", command=addGrade)
-            popup.add_separator()
 
         elif tree.tag_has('section', item):
             global Section
@@ -720,7 +716,7 @@ def do_popup(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             section.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
@@ -736,7 +732,7 @@ def do_popup(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             announcement.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
@@ -748,7 +744,7 @@ def do_popup(event):
             # Course a gider
             parent = tree.parent(item)
             course.setCourseCode(tree.item(parent,"text"))
-            parent = tree.parent(item)
+            parent = tree.parent(parent)
             semester.setSemesterName(tree.item(parent,"text"))
             course.get_rowid_from_database(semester.getSemesterName())
             grade.get_rowid_from_database(semester.getSemesterName(), course.get_courseID())
