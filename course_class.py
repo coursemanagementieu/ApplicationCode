@@ -10,166 +10,6 @@ class Course:
         self.courseBook = None
         self.refBookName = None
         self.syllabus = None
-        self.htmfile = """<!doctype html>
-        <html lang="en">
-        	<head>
-        		<meta charset="utf-8" />
-        		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-        		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-        		<link href="https://fonts.googleapis.com/css?family=Work+Sans:400,600&subset=latin-ext" rel="stylesheet">
-
-        		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        		<!-- Latest compiled and minified CSS -->
-        		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        		<!-- Optional theme -->
-        		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-        		<!-- Latest compiled and minified JavaScript -->
-        		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        		<script src="https://use.fontawesome.com/6cba04d2b9.js"></script>
-        		<style>
-        			body {{
-        				font-family: 'Work Sans';
-        			}}
-        		</style>
-        		<title>{derskodu} - {dersadi}</title>
-        	</head>
-
-        	<body>
-        		<div class="container">
-        			<div class="page-header">
-        				<h3>{derskodu} - {dersadi}</h3>
-        				<h4>Kaya Oğuz, {semesteradi}</h4>
-        			</div>
-        		</div>
-
-        		<div class="container">
-        			<div class="col-xs-12 col-sm-6">
-        				<div class="panel panel-info">
-        					<div class="panel-heading">Course Information</div>
-        					<table class="table">
-        						<tbody>
-        							<tr><td>Syllabus</td><td>:</td><td><a href="{sylubuslinki}">Link</a></td></tr>
-        							<tr><td>Classroom</td><td>:</td><td>{sınıf}</td></tr>
-        							<tr><td>Hours</td><td>:</td><td>{gun}, {saat}</td></tr>
-        							<tr><td>Textbook</td><td>:</td><td>{textbook}</td></tr>
-        							<!-- <tr><td>Course Slides</td><td>:</td><td><a href="#">Link</a></td></tr>
-        							<tr><td>Other course material</td><td>:</td><td><a href="files/">Link</a></td></tr>-->
-
-        						</tbody>
-        					</table>
-        				</div>
-        				<div class="panel panel-info">
-        					<div class="panel-heading">Lecturer Information</div>
-        					<table class="table">
-        						<tbody>
-        							<tr><td>E-mail</td><td>:</td><td>kayaoguz /a/ gmail.com</td></tr>
-        							<tr><td>Address</td><td>:</td><td>Izmir University of Economics
-        Faculty of Engineering
-        Department of Computer Engineering
-        Sakarya Cad. No:156, 35330, Balçova, İzmir</td></tr>
-        							<tr><td>Office Hours</td><td>:</td><td>Mondays 15:00-15:50 and Wednesdays 11:00-11:50</td></tr>
-        							<tr><td>Home URL</td><td>:</td><td><a href="http://homes.ieu.edu.tr/koguz/">Link</a></td></tr>
-        						</tbody>
-        					</table>
-        				</div>
-        			</div>
-        			<div class="col-xs-12 col-sm-6">
-        				<div class="panel panel-info">
-        					<div class="panel-heading">Lectures</div>
-        					<div class="panel-body">
-        						<table class="table table-striped">
-        							<thead>
-        								<tr><th>Date</th><th>Topic</th></tr>
-        							</thead>
-        							<tbody>
-        								<tr>
-        									<td>Week 1<br />2016.09.30</td>
-        									<td>Chapter 01: Introduction<br />
-        									<a href="https://www.dropbox.com/s/2tv5z1g3vah8xq2/Ch01.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 2<br />2016.10.07</td>
-        									<td>Chapter 02: Software Processes<br />
-        									<a href="https://www.dropbox.com/s/5u4fos77na9bvit/Ch02.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 3<br />2016.10.14</td>
-        									<td>Chapter 03: Agile Software Development<br />
-        									<a href="https://www.dropbox.com/s/u4k0hrzgwy8jj4i/Ch03.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 4<br />2016.10.21</td>
-        									<td>Chapter 04: Requirements Engineering<br />
-        									<a href="https://www.dropbox.com/s/pklwjh49zflheth/Ch04.pptx?dl=0">Presentation</td>
-        								</tr>
-                                        <tr>
-        									<td>Week 5<br />2016.11.04</td>
-        									<td>Chapter 05: System Modeling<br />
-        									<a href="https://www.dropbox.com/s/xv6a3wia6vf0si8/Ch05.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 6<br />2016.11.11</td>
-        									<td>Chapter 06: Architectural Design<br />
-        									<a href="https://www.dropbox.com/s/4f0sxsrfy0wcz4j/Ch06.pptx?dl=0">Presentation</td>
-        								</tr>
-                                        <tr>
-        									<td>Week 7<br />2016.11.18</td>
-        									<td>MIDTERM</td>
-        								</tr>
-        								<tr>
-        									<td>Week 8<br />2016.11.25</td>
-        									<td>Chapter 07: Design and Implementation<br />
-        									<a href="https://www.dropbox.com/s/3vo5cqk4q9qv8jz/Ch07.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 9<br />2016.12.02</td>
-        									<td>Practice with new Project<br />Project Meetings
-        									</td>
-        								</tr>
-        								<tr>
-        									<td>Week 10<br />2016.12.09</td>
-        									<td>Chapter 08: Software Testing<br />
-        									<a href="https://www.dropbox.com/s/40wk47mq3idlsal/Ch08.pptx?dl=0">Presentation</td>
-        								</tr>
-        								<tr>
-        									<td>Week 11<br />2016.12.16</td>
-        									<td>Chapter 09: Software Evolution<br />
-        									<a href="https://www.dropbox.com/s/cj9dgun1x4lgmrq/Ch09.pptx?dl=0">Presentation</td>
-        								</tr>
-                                        <tr>
-        									<td>Week 12<br />2016.12.23</td>
-        									<td>Chapter 10: Software Engineering<br />
-        									<a href="https://drive.google.com/open?id=1j9JIpKqDWVv_kcL5vhP95i_6DRdHz70Q_4EBi4N0IXI">Presentation</td>
-        								</tr>
-        							</tbody>
-        						</table>
-        					</div>
-        				</div>
-        				<div class="panel panel-info">
-        					<div class="panel-heading">Announcements</div>
-        					<div class="panel-body">
-        						<table class="table table-striped">
-        							<thead>
-        								<tr><th>Date</th><th>Announcement</th></tr>
-        							</thead>
-        							<tbody>
-        								<tr>
-        									<td>2016.09.30, 09:11</td>
-        									<td>Midterm: Midterm will be on 18th of November.</td>
-        								</tr>
-        								<tr>
-        									<td>2016.19.22, 16:26</td>
-        									<td>Just for this week, our lecture will be at M201. Please tell your friends.</td>
-        								</tr>
-        							</tbody>
-        						</table>
-        					</div>
-        				</div>
-        			</div>
-        		</div>
-        	</body>
-        </html>"""
 
     def setCourseName(self, name):
         self.courseName = name
@@ -206,9 +46,6 @@ class Course:
 
     def get_courseID(self):
         return self.courseID
-
-    def generateHTMLfile(self,semesterName,classRoom,day,hour):
-        self.htmfile.format(derskodu=self.getCourseCode(),dersadi=self.getCourseName(),semesteradi=semesterName,sylubuslinki=self.getSyllabus(),sınıf=classRoom,gun=day,saat=hour,textbook=self.getCourseBook())
 
     # These functions is related with database
     def insertCourseInDatabase(self, semesterName):
@@ -326,6 +163,9 @@ class Subject:
 
     def setID(self, rowid):
         self.ID = rowid
+
+    def getID(self):
+        return self.ID
 
     # These functions are related with database
     def insertSubjectInDatabase(self, semesterName, courseID):

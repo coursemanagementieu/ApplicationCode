@@ -38,4 +38,3 @@ class Semester:
     def delete_semester(self):
         db_fonk.delete_semester(self.name)
 
-

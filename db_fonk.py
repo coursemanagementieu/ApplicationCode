@@ -582,20 +582,19 @@ def edit_studentEvaluation_in(semID, cID, evaID, stuID, evaluation):
         save_changes()
 
 
-# This function is better for our program
-def select_studentEvaluation_in(semID, cID, evaID, stuID):
-    db_cursor.execute("""SELECT evaluation FROM studentEvaluationIn WHERE semesterID=? AND courseID=? AND
-                         evaluationID=? AND studentID=?""", (semID, cID, evaID, stuID))
-    row = db_cursor.fetchone()
+def select_evaluationID_studentEvaluation_in(semID, cID, stuID):
+    db_cursor.execute("""SELECT evaluationID FROM studentEvaluationIn WHERE semesterID=? AND courseID=? AND
+                         studentID=?""", (semID, cID, stuID))
+    row = db_cursor.fetchall()
     return row
     # for id in row:
     #     print(id[0])
 
 
-def select_all_studentEvaluation_in(semID, cID, stuID):
+def select_studentEvaluation_in(semID, cID, evaID, stuID):
     db_cursor.execute("""SELECT evaluation FROM studentEvaluationIn WHERE semesterID=? AND courseID=? AND
-                         studentID=?""", (semID, cID, stuID))
-    row = db_cursor.fetchall()
+                         evaluationID=? AND studentID=?""", (semID, cID, evaID, stuID))
+    row = db_cursor.fetchone()
     return row
     # for id in row:
     #     print(id[0])
