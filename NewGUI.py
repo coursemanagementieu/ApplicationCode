@@ -50,7 +50,7 @@ def get_all_section():
         section.setSectionID(cell[0])
         section.get_info_from_database()
         Section = tree.insert(Course, "end", text = section.getSectionName(), tag=('section'))
-        # get_all_student()
+        get_all_student()
 def get_all_announcement():
     info = announcement.get_all_announcement_in(semester.getSemesterName(), course.get_courseID())
     for cell in info:
@@ -64,7 +64,12 @@ def get_all_grade():
         grade.get_info_from_database()
         tree.insert(Course, "end", text = grade.getGradeName(), tag = ('grade'))
 
-# def get_all_student():
+def get_all_student():
+    info = student.get_all_student_in(semester.getSemesterName(), course.get_courseID(), section.getSectionID())
+    for cell in info:
+        student.setStudentId(cell[0])
+        student.get_info_from_database()
+        tree.insert(Section, "end", text = student.getStudentId(), tag=('student'))
 # def get_all_note():
 
 #-----------------FULLSCREEN-----------------------------
@@ -533,7 +538,7 @@ def AddingStudentFunc():
     CreateStudentwindow.destroy()
 
 def StudentListInsert():
-    tree.insert(Section, 'end', text=DirectoryEntry.get(), tag=('student'))
+    tree.insert(Section, 'end', text="Student", tag=('student'))
     AddStudent()
 
 def CallCreateNewStudent(event):
@@ -663,6 +668,7 @@ def OnDoubleClick(event):
             print("Yeees student")
             student.setStudentId(tree.item(item,"text"))
             student.get_info_from_database()
+            StudentInfo()
         # elif tree.tag_has('note',item):
         #     print("Yeees note!")
         #     note.setHead(tree.item(item,"text"))
